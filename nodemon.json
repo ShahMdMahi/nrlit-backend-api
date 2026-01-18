@@ -1,0 +1,15 @@
+{
+    "watch": [
+        "src",
+        ".env",
+        "package.json",
+        "tsconfig.json"
+    ],
+    "ext": "js,json,ts,env",
+    "ignore": [
+        "node_modules",
+        "dist",
+        "README.md"
+    ],
+    "exec": "tsx src/index.ts"
+}
