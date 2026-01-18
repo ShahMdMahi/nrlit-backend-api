@@ -31,6 +31,7 @@ export function errorHandler(
     success: false,
     message:
       err instanceof HttpError || !isProd ? message : "Internal Server Error",
+    errors: err instanceof HttpError ? err.details : undefined,
     requestId: req.id,
   });
 }

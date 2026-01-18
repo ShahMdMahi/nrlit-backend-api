@@ -55,7 +55,16 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use("/api/v1/auth", authRouter);
 
-// 8. Error Handling
+// 8. 404 Handler
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+    requestId: req.id,
+  });
+});
+
+// 9. Error Handling
 app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
