@@ -53,7 +53,14 @@ export const JsonNull = runtime.JsonNull;
  */
 export const AnyNull = runtime.AnyNull;
 
-export const ModelName = {} as const;
+export const ModelName = {
+  User: "User",
+  Session: "Session",
+  BlogProfile: "BlogProfile",
+  BlogPost: "BlogPost",
+  BlogPostComment: "BlogPostComment",
+  AuditLog: "AuditLog",
+} as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 
@@ -70,3 +77,195 @@ export const TransactionIsolationLevel = {
 
 export type TransactionIsolationLevel =
   (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
+
+export const UserScalarFieldEnum = {
+  id: "id",
+  firstName: "firstName",
+  lastName: "lastName",
+  email: "email",
+  username: "username",
+  phone: "phone",
+  password: "password",
+  avatar: "avatar",
+  dateOfBirth: "dateOfBirth",
+  verificationToken: "verificationToken",
+  resetPasswordToken: "resetPasswordToken",
+  failedLoginAttempts: "failedLoginAttempts",
+  twoFactorEnabled: "twoFactorEnabled",
+  twoFactorSecret: "twoFactorSecret",
+  twoFactorBackupCodes: "twoFactorBackupCodes",
+  role: "role",
+  metadata: "metadata",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt",
+  verifiedAt: "verifiedAt",
+  approvedAt: "approvedAt",
+  suspendedAt: "suspendedAt",
+  bannedAt: "bannedAt",
+  lockedUntil: "lockedUntil",
+  lastLoginAt: "lastLoginAt",
+  lastFailedLoginAt: "lastFailedLoginAt",
+  verificationTokenExpiredAt: "verificationTokenExpiredAt",
+  resetPasswordTokenExpiredAt: "resetPasswordTokenExpiredAt",
+} as const;
+
+export type UserScalarFieldEnum =
+  (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
+
+export const SessionScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  token: "token",
+  ipAddress: "ipAddress",
+  isp: "isp",
+  region: "region",
+  country: "country",
+  city: "city",
+  latitude: "latitude",
+  longitude: "longitude",
+  userAgent: "userAgent",
+  fingerprint: "fingerprint",
+  deviceName: "deviceName",
+  deviceBrand: "deviceBrand",
+  deviceModel: "deviceModel",
+  osName: "osName",
+  osVersion: "osVersion",
+  browserName: "browserName",
+  browserVersion: "browserVersion",
+  browserEngine: "browserEngine",
+  cpuArch: "cpuArch",
+  deviceType: "deviceType",
+  metadata: "metadata",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt",
+  accessedAt: "accessedAt",
+  expiredAt: "expiredAt",
+  revokedAt: "revokedAt",
+} as const;
+
+export type SessionScalarFieldEnum =
+  (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum];
+
+export const BlogProfileScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  bio: "bio",
+  website: "website",
+  location: "location",
+  visibility: "visibility",
+  metadata: "metadata",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt",
+} as const;
+
+export type BlogProfileScalarFieldEnum =
+  (typeof BlogProfileScalarFieldEnum)[keyof typeof BlogProfileScalarFieldEnum];
+
+export const BlogPostScalarFieldEnum = {
+  id: "id",
+  blogProfileId: "blogProfileId",
+  title: "title",
+  slug: "slug",
+  content: "content",
+  summary: "summary",
+  coverImage: "coverImage",
+  visibility: "visibility",
+  status: "status",
+  metadata: "metadata",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt",
+  publishedAt: "publishedAt",
+  archivedAt: "archivedAt",
+} as const;
+
+export type BlogPostScalarFieldEnum =
+  (typeof BlogPostScalarFieldEnum)[keyof typeof BlogPostScalarFieldEnum];
+
+export const BlogPostCommentScalarFieldEnum = {
+  id: "id",
+  blogPostId: "blogPostId",
+  blogProfileId: "blogProfileId",
+  content: "content",
+  metadata: "metadata",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  deletedAt: "deletedAt",
+} as const;
+
+export type BlogPostCommentScalarFieldEnum =
+  (typeof BlogPostCommentScalarFieldEnum)[keyof typeof BlogPostCommentScalarFieldEnum];
+
+export const AuditLogScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  entityId: "entityId",
+  entity: "entity",
+  action: "action",
+  description: "description",
+  ipAddress: "ipAddress",
+  isp: "isp",
+  region: "region",
+  country: "country",
+  city: "city",
+  latitude: "latitude",
+  longitude: "longitude",
+  userAgent: "userAgent",
+  fingerprint: "fingerprint",
+  deviceName: "deviceName",
+  deviceBrand: "deviceBrand",
+  deviceModel: "deviceModel",
+  osName: "osName",
+  osVersion: "osVersion",
+  browserName: "browserName",
+  browserVersion: "browserVersion",
+  browserEngine: "browserEngine",
+  cpuArch: "cpuArch",
+  deviceType: "deviceType",
+  metadata: "metadata",
+  createdAt: "createdAt",
+} as const;
+
+export type AuditLogScalarFieldEnum =
+  (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum];
+
+export const SortOrder = {
+  asc: "asc",
+  desc: "desc",
+} as const;
+
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+
+export const NullableJsonNullValueInput = {
+  DbNull: "DbNull",
+  JsonNull: "JsonNull",
+} as const;
+
+export type NullableJsonNullValueInput =
+  (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
+
+export const QueryMode = {
+  default: "default",
+  insensitive: "insensitive",
+} as const;
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
+
+export const JsonNullValueFilter = {
+  DbNull: "DbNull",
+  JsonNull: "JsonNull",
+  AnyNull: "AnyNull",
+} as const;
+
+export type JsonNullValueFilter =
+  (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter];
+
+export const NullsOrder = {
+  first: "first",
+  last: "last",
+} as const;
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];

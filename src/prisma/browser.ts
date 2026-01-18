@@ -16,3 +16,33 @@ import * as Prisma from "./internal/prismaNamespaceBrowser.js";
 export { Prisma };
 export * as $Enums from "./enums.js";
 export * from "./enums.js";
+/**
+ * Model User
+ *
+ */
+export type User = Prisma.UserModel;
+/**
+ * Model Session
+ *
+ */
+export type Session = Prisma.SessionModel;
+/**
+ * Model BlogProfile
+ *
+ */
+export type BlogProfile = Prisma.BlogProfileModel;
+/**
+ * Model BlogPost
+ *
+ */
+export type BlogPost = Prisma.BlogPostModel;
+/**
+ * Model BlogPostComment
+ *
+ */
+export type BlogPostComment = Prisma.BlogPostCommentModel;
+/**
+ * Model AuditLog
+ *
+ */
+export type AuditLog = Prisma.AuditLogModel;

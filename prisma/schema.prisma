@@ -6,3 +6,367 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum Role {
+  // System Roles
+  SYSTEM_OWNER
+  SYSTEM_ADMIN
+  SYSTEM_MODERATOR
+  SYSTEM_USER
+
+  // User
+  NORMAL_USER
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  TV
+  WEARABLE
+  CONSOLE
+  UNKNOWN
+}
+
+enum BlogProfileVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum BlogPostVisibility {
+  PUBLIC
+  PRIVATE
+  UNLISTED
+}
+
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AuditEntity {
+  USER
+  SESSION
+  BLOG_PROFILE
+  BLOG_POST
+  BLOG_POST_COMMENT
+}
+
+enum AuditAction {
+  USER_REGISTERED
+  USER_LOGGED_IN
+  USER_LOGGED_OUT
+  USER_FORGOT_PASSWORD
+  USER_RESET_PASSWORD
+  USER_RESEND_VERIFICATION
+  USER_2FA_ENABLED
+  USER_2FA_DISABLED
+  USER_2FA_CODES_GENERATED
+  USER_2FA_CHALLENGED
+  USER_2FA_VERIFIED
+  USER_2FA_FAILED
+  USER_2FA_RECOVERED
+  USER_FAILED_LOGIN
+  USER_CHANGED_PASSWORD
+  USER_UPDATED_PROFILE
+  USER_VERIFIED
+  USER_APPROVED
+  USER_SUSPENDED
+  USER_BANNED
+  USER_LOCKED
+  USER_CREATED
+  USER_UPDATED
+  USER_DELETED
+
+  SESSION_CREATED
+  SESSION_EXPIRED
+  SESSION_REVOKED
+
+  BLOG_PROFILE_CREATED
+  BLOG_PROFILE_UPDATED
+  BLOG_PROFILE_DELETED
+
+  BLOG_POST_CREATED
+  BLOG_POST_UPDATED
+  BLOG_POST_DELETED
+  BLOG_POST_STATUS_CHANGED
+  BLOG_POST_VISIBILITY_CHANGED
+
+  BLOG_POST_COMMENT_CREATED
+  BLOG_POST_COMMENT_UPDATED
+  BLOG_POST_COMMENT_DELETED
+}
+
+model User {
+  // Primary Key
+  id String @id @default(cuid())
+
+  // Foreign Keys
+
+  // Parent Relations
+
+  // Child Relations
+  sessions    Session[]
+  blogProfile BlogProfile?
+  auditLogs   AuditLog[]
+
+  // Fields
+  firstName          String
+  lastName           String
+  email              String    @unique
+  username           String    @unique
+  phone              String    @unique
+  password           String
+  avatar             String?
+  dateOfBirth        DateTime?
+  verificationToken  String?
+  resetPasswordToken String?
+
+  // Security
+  failedLoginAttempts  Int      @default(0)
+  twoFactorEnabled     Boolean  @default(false)
+  twoFactorSecret      String?
+  twoFactorBackupCodes String[]
+
+  // Enums
+  role Role @default(NORMAL_USER)
+
+  // Metadata
+  metadata Json? @db.JsonB
+
+  // Timestamps
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
+  deletedAt                   DateTime?
+  verifiedAt                  DateTime?
+  approvedAt                  DateTime?
+  suspendedAt                 DateTime?
+  bannedAt                    DateTime?
+  lockedUntil                 DateTime?
+  lastLoginAt                 DateTime?
+  lastFailedLoginAt           DateTime?
+  verificationTokenExpiredAt  DateTime?
+  resetPasswordTokenExpiredAt DateTime?
+
+  // Constraints and Indexes
+  @@unique([username, email, phone])
+  @@index([username, email, phone])
+  @@index([id])
+  @@index([id, deletedAt])
+  @@index([email, deletedAt])
+  @@index([username, deletedAt])
+  @@index([phone, deletedAt])
+  @@index([verificationToken, verificationTokenExpiredAt, deletedAt])
+  @@index([resetPasswordToken, resetPasswordTokenExpiredAt, deletedAt])
+}
+
+model Session {
+  // Primary Key
+  id String @id @default(cuid())
+
+  // Foreign Keys
+  userId String
+
+  // Parent Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Child Relations
+
+  // Fields
+  token          String  @unique
+  ipAddress      String?
+  isp            String?
+  region         String?
+  country        String?
+  city           String?
+  latitude       Float?
+  longitude      Float?
+  userAgent      String?
+  fingerprint    String?
+  deviceName     String?
+  deviceBrand    String?
+  deviceModel    String?
+  osName         String?
+  osVersion      String?
+  browserName    String?
+  browserVersion String?
+  browserEngine  String?
+  cpuArch        String?
+
+  // Enums
+  deviceType DeviceType @default(UNKNOWN)
+
+  // Metadata
+  metadata Json? @db.JsonB
+
+  // Timestamps
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  accessedAt DateTime  @default(now())
+  expiredAt  DateTime?
+  revokedAt  DateTime?
+
+  // Constraints and Indexes
+  @@index([id, deletedAt])
+  @@index([userId, deletedAt])
+}
+
+model BlogProfile {
+  // Primary Key
+  id String @id @default(cuid())
+
+  // Foreign Keys
+  userId String @unique
+
+  // Parent Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Child Relations
+  blogPosts        BlogPost[]
+  blogPostComments BlogPostComment[]
+
+  // Fields
+  bio      String?
+  website  String?
+  location String?
+
+  // Enums
+  visibility BlogProfileVisibility @default(PUBLIC)
+
+  // Metadata
+  metadata Json? @db.JsonB
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Constraints and Indexes
+  @@index([id, visibility, deletedAt])
+  @@index([userId, visibility, deletedAt])
+}
+
+model BlogPost {
+  // Primary Key
+  id String @id @default(cuid())
+
+  // Foreign Keys
+  blogProfileId String
+
+  // Parent Relations
+  blogProfile BlogProfile @relation(fields: [blogProfileId], references: [id], onDelete: Cascade)
+
+  // Child Relations
+  comments BlogPostComment[]
+
+  // Fields
+  title      String
+  slug       String  @unique
+  content    String  @db.Text
+  summary    String?
+  coverImage String?
+
+  // Enums
+  visibility BlogPostVisibility @default(PRIVATE)
+  status     BlogPostStatus     @default(DRAFT)
+
+  // Metadata
+  metadata Json? @db.JsonB
+
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  publishedAt DateTime?
+  archivedAt  DateTime?
+
+  // Constraints and Indexes
+  @@index([id, status, visibility, deletedAt])
+  @@index([slug, status, visibility, deletedAt])
+  @@index([publishedAt, status, visibility, deletedAt])
+  @@index([archivedAt, status, visibility, deletedAt])
+}
+
+model BlogPostComment {
+  // Primary Key
+  id String @id @default(cuid())
+
+  // Foreign Keys
+  blogPostId    String
+  blogProfileId String
+
+  // Parent Relations
+  blogPost    BlogPost    @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  blogProfile BlogProfile @relation(fields: [blogProfileId], references: [id], onDelete: Cascade)
+
+  // Child Relations
+
+  // Fields
+  content String
+
+  // Metadata
+  metadata Json? @db.JsonB
+
+  // Timestamps
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Constraints and Indexes
+  @@index([id, deletedAt])
+  @@index([blogPostId, deletedAt])
+  @@index([blogProfileId, deletedAt])
+}
+
+model AuditLog {
+  // Primary Key
+  id String @id @default(cuid())
+
+  // Foreign Keys
+  userId   String?
+  entityId String
+
+  // Parent Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Child Relations
+
+  // Fields
+  entity         AuditEntity
+  action         AuditAction
+  description    String?
+  ipAddress      String?
+  isp            String?
+  region         String?
+  country        String?
+  city           String?
+  latitude       Float?
+  longitude      Float?
+  userAgent      String?
+  fingerprint    String?
+  deviceName     String?
+  deviceBrand    String?
+  deviceModel    String?
+  osName         String?
+  osVersion      String?
+  browserName    String?
+  browserVersion String?
+  browserEngine  String?
+  cpuArch        String?
+
+  // Enums
+  deviceType DeviceType @default(UNKNOWN)
+
+  // Metadata
+  metadata Json? @db.JsonB
+
+  // Timestamps
+  createdAt DateTime @default(now())
+
+  // Constraints and Indexes
+  @@index([id])
+  @@index([userId])
+  @@index([entity, entityId])
+}

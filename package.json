@@ -24,8 +24,14 @@
   "packageManager": "pnpm@10.28.0",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@types/compression": "^1.8.1",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/express-useragent": "^1.0.5",
+    "@types/express-xss-sanitizer": "^2.0.0",
+    "@types/hpp": "^0.2.7",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^25.0.9",
     "@types/pg": "^8.16.0",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
@@ -44,10 +50,23 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "argon2": "^0.44.0",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "envalid": "^8.1.1",
     "express": "^5.2.1",
-    "pg": "^8.17.1"
+    "express-rate-limit": "^8.2.1",
+    "express-useragent": "^2.0.2",
+    "express-xss-sanitizer": "^2.0.1",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "morgan": "^1.10.1",
+    "pg": "^8.17.1",
+    "ua-parser-js": "^2.0.8",
+    "uuid": "^13.0.0",
+    "winston": "^3.19.0",
+    "zod": "^4.3.5"
   }
 }

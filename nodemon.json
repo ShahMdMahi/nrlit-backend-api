@@ -1,11 +1,12 @@
 {
     "watch": [
         "src",
+        "prisma",
         ".env",
         "package.json",
         "tsconfig.json"
     ],
-    "ext": "js,json,ts,env",
+    "ext": "js,json,ts,env,prisma",
     "ignore": [
         "node_modules",
         "dist",
