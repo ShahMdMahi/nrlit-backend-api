@@ -20,20 +20,8 @@ export type AuditLogModel =
 
 export type AggregateAuditLog = {
   _count: AuditLogCountAggregateOutputType | null;
-  _avg: AuditLogAvgAggregateOutputType | null;
-  _sum: AuditLogSumAggregateOutputType | null;
   _min: AuditLogMinAggregateOutputType | null;
   _max: AuditLogMaxAggregateOutputType | null;
-};
-
-export type AuditLogAvgAggregateOutputType = {
-  latitude: number | null;
-  longitude: number | null;
-};
-
-export type AuditLogSumAggregateOutputType = {
-  latitude: number | null;
-  longitude: number | null;
 };
 
 export type AuditLogMinAggregateOutputType = {
@@ -44,24 +32,8 @@ export type AuditLogMinAggregateOutputType = {
   action: $Enums.AuditAction | null;
   description: string | null;
   ipAddress: string | null;
-  isp: string | null;
-  region: string | null;
-  country: string | null;
-  city: string | null;
-  latitude: number | null;
-  longitude: number | null;
   userAgent: string | null;
   fingerprint: string | null;
-  deviceName: string | null;
-  deviceBrand: string | null;
-  deviceModel: string | null;
-  osName: string | null;
-  osVersion: string | null;
-  browserName: string | null;
-  browserVersion: string | null;
-  browserEngine: string | null;
-  cpuArch: string | null;
-  deviceType: $Enums.DeviceType | null;
   createdAt: Date | null;
 };
 
@@ -73,24 +45,8 @@ export type AuditLogMaxAggregateOutputType = {
   action: $Enums.AuditAction | null;
   description: string | null;
   ipAddress: string | null;
-  isp: string | null;
-  region: string | null;
-  country: string | null;
-  city: string | null;
-  latitude: number | null;
-  longitude: number | null;
   userAgent: string | null;
   fingerprint: string | null;
-  deviceName: string | null;
-  deviceBrand: string | null;
-  deviceModel: string | null;
-  osName: string | null;
-  osVersion: string | null;
-  browserName: string | null;
-  browserVersion: string | null;
-  browserEngine: string | null;
-  cpuArch: string | null;
-  deviceType: $Enums.DeviceType | null;
   createdAt: Date | null;
 };
 
@@ -102,37 +58,11 @@ export type AuditLogCountAggregateOutputType = {
   action: number;
   description: number;
   ipAddress: number;
-  isp: number;
-  region: number;
-  country: number;
-  city: number;
-  latitude: number;
-  longitude: number;
   userAgent: number;
   fingerprint: number;
-  deviceName: number;
-  deviceBrand: number;
-  deviceModel: number;
-  osName: number;
-  osVersion: number;
-  browserName: number;
-  browserVersion: number;
-  browserEngine: number;
-  cpuArch: number;
-  deviceType: number;
   metadata: number;
   createdAt: number;
   _all: number;
-};
-
-export type AuditLogAvgAggregateInputType = {
-  latitude?: true;
-  longitude?: true;
-};
-
-export type AuditLogSumAggregateInputType = {
-  latitude?: true;
-  longitude?: true;
 };
 
 export type AuditLogMinAggregateInputType = {
@@ -143,24 +73,8 @@ export type AuditLogMinAggregateInputType = {
   action?: true;
   description?: true;
   ipAddress?: true;
-  isp?: true;
-  region?: true;
-  country?: true;
-  city?: true;
-  latitude?: true;
-  longitude?: true;
   userAgent?: true;
   fingerprint?: true;
-  deviceName?: true;
-  deviceBrand?: true;
-  deviceModel?: true;
-  osName?: true;
-  osVersion?: true;
-  browserName?: true;
-  browserVersion?: true;
-  browserEngine?: true;
-  cpuArch?: true;
-  deviceType?: true;
   createdAt?: true;
 };
 
@@ -172,24 +86,8 @@ export type AuditLogMaxAggregateInputType = {
   action?: true;
   description?: true;
   ipAddress?: true;
-  isp?: true;
-  region?: true;
-  country?: true;
-  city?: true;
-  latitude?: true;
-  longitude?: true;
   userAgent?: true;
   fingerprint?: true;
-  deviceName?: true;
-  deviceBrand?: true;
-  deviceModel?: true;
-  osName?: true;
-  osVersion?: true;
-  browserName?: true;
-  browserVersion?: true;
-  browserEngine?: true;
-  cpuArch?: true;
-  deviceType?: true;
   createdAt?: true;
 };
 
@@ -201,24 +99,8 @@ export type AuditLogCountAggregateInputType = {
   action?: true;
   description?: true;
   ipAddress?: true;
-  isp?: true;
-  region?: true;
-  country?: true;
-  city?: true;
-  latitude?: true;
-  longitude?: true;
   userAgent?: true;
   fingerprint?: true;
-  deviceName?: true;
-  deviceBrand?: true;
-  deviceModel?: true;
-  osName?: true;
-  osVersion?: true;
-  browserName?: true;
-  browserVersion?: true;
-  browserEngine?: true;
-  cpuArch?: true;
-  deviceType?: true;
   metadata?: true;
   createdAt?: true;
   _all?: true;
@@ -267,18 +149,6 @@ export type AuditLogAggregateArgs<
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    *
-   * Select which fields to average
-   **/
-  _avg?: AuditLogAvgAggregateInputType;
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   *
-   * Select which fields to sum
-   **/
-  _sum?: AuditLogSumAggregateInputType;
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   *
    * Select which fields to find the minimum value
    **/
   _min?: AuditLogMinAggregateInputType;
@@ -311,8 +181,6 @@ export type AuditLogGroupByArgs<
   take?: number;
   skip?: number;
   _count?: AuditLogCountAggregateInputType | true;
-  _avg?: AuditLogAvgAggregateInputType;
-  _sum?: AuditLogSumAggregateInputType;
   _min?: AuditLogMinAggregateInputType;
   _max?: AuditLogMaxAggregateInputType;
 };
@@ -325,29 +193,11 @@ export type AuditLogGroupByOutputType = {
   action: $Enums.AuditAction;
   description: string | null;
   ipAddress: string | null;
-  isp: string | null;
-  region: string | null;
-  country: string | null;
-  city: string | null;
-  latitude: number | null;
-  longitude: number | null;
   userAgent: string | null;
   fingerprint: string | null;
-  deviceName: string | null;
-  deviceBrand: string | null;
-  deviceModel: string | null;
-  osName: string | null;
-  osVersion: string | null;
-  browserName: string | null;
-  browserVersion: string | null;
-  browserEngine: string | null;
-  cpuArch: string | null;
-  deviceType: $Enums.DeviceType;
   metadata: runtime.JsonValue | null;
   createdAt: Date;
   _count: AuditLogCountAggregateOutputType | null;
-  _avg: AuditLogAvgAggregateOutputType | null;
-  _sum: AuditLogSumAggregateOutputType | null;
   _min: AuditLogMinAggregateOutputType | null;
   _max: AuditLogMaxAggregateOutputType | null;
 };
@@ -376,24 +226,8 @@ export type AuditLogWhereInput = {
   action?: Prisma.EnumAuditActionFilter<"AuditLog"> | $Enums.AuditAction;
   description?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
   ipAddress?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  isp?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  region?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  country?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  city?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  latitude?: Prisma.FloatNullableFilter<"AuditLog"> | number | null;
-  longitude?: Prisma.FloatNullableFilter<"AuditLog"> | number | null;
   userAgent?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
   fingerprint?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceBrand?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceModel?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  osName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  osVersion?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  browserName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  browserVersion?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  browserEngine?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  cpuArch?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceType?: Prisma.EnumDeviceTypeFilter<"AuditLog"> | $Enums.DeviceType;
   metadata?: Prisma.JsonNullableFilter<"AuditLog">;
   createdAt?: Prisma.DateTimeFilter<"AuditLog"> | Date | string;
   user?: Prisma.XOR<
@@ -410,24 +244,8 @@ export type AuditLogOrderByWithRelationInput = {
   action?: Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder;
-  isp?: Prisma.SortOrderInput | Prisma.SortOrder;
-  region?: Prisma.SortOrderInput | Prisma.SortOrder;
-  country?: Prisma.SortOrderInput | Prisma.SortOrder;
-  city?: Prisma.SortOrderInput | Prisma.SortOrder;
-  latitude?: Prisma.SortOrderInput | Prisma.SortOrder;
-  longitude?: Prisma.SortOrderInput | Prisma.SortOrder;
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder;
   fingerprint?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceName?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceBrand?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceModel?: Prisma.SortOrderInput | Prisma.SortOrder;
-  osName?: Prisma.SortOrderInput | Prisma.SortOrder;
-  osVersion?: Prisma.SortOrderInput | Prisma.SortOrder;
-  browserName?: Prisma.SortOrderInput | Prisma.SortOrder;
-  browserVersion?: Prisma.SortOrderInput | Prisma.SortOrder;
-  browserEngine?: Prisma.SortOrderInput | Prisma.SortOrder;
-  cpuArch?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceType?: Prisma.SortOrder;
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   user?: Prisma.UserOrderByWithRelationInput;
@@ -445,24 +263,8 @@ export type AuditLogWhereUniqueInput = Prisma.AtLeast<
     action?: Prisma.EnumAuditActionFilter<"AuditLog"> | $Enums.AuditAction;
     description?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
     ipAddress?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    isp?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    region?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    country?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    city?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    latitude?: Prisma.FloatNullableFilter<"AuditLog"> | number | null;
-    longitude?: Prisma.FloatNullableFilter<"AuditLog"> | number | null;
     userAgent?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
     fingerprint?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    deviceName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    deviceBrand?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    deviceModel?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    osName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    osVersion?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    browserName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    browserVersion?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    browserEngine?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    cpuArch?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-    deviceType?: Prisma.EnumDeviceTypeFilter<"AuditLog"> | $Enums.DeviceType;
     metadata?: Prisma.JsonNullableFilter<"AuditLog">;
     createdAt?: Prisma.DateTimeFilter<"AuditLog"> | Date | string;
     user?: Prisma.XOR<
@@ -481,31 +283,13 @@ export type AuditLogOrderByWithAggregationInput = {
   action?: Prisma.SortOrder;
   description?: Prisma.SortOrderInput | Prisma.SortOrder;
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder;
-  isp?: Prisma.SortOrderInput | Prisma.SortOrder;
-  region?: Prisma.SortOrderInput | Prisma.SortOrder;
-  country?: Prisma.SortOrderInput | Prisma.SortOrder;
-  city?: Prisma.SortOrderInput | Prisma.SortOrder;
-  latitude?: Prisma.SortOrderInput | Prisma.SortOrder;
-  longitude?: Prisma.SortOrderInput | Prisma.SortOrder;
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder;
   fingerprint?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceName?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceBrand?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceModel?: Prisma.SortOrderInput | Prisma.SortOrder;
-  osName?: Prisma.SortOrderInput | Prisma.SortOrder;
-  osVersion?: Prisma.SortOrderInput | Prisma.SortOrder;
-  browserName?: Prisma.SortOrderInput | Prisma.SortOrder;
-  browserVersion?: Prisma.SortOrderInput | Prisma.SortOrder;
-  browserEngine?: Prisma.SortOrderInput | Prisma.SortOrder;
-  cpuArch?: Prisma.SortOrderInput | Prisma.SortOrder;
-  deviceType?: Prisma.SortOrder;
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   _count?: Prisma.AuditLogCountOrderByAggregateInput;
-  _avg?: Prisma.AuditLogAvgOrderByAggregateInput;
   _max?: Prisma.AuditLogMaxOrderByAggregateInput;
   _min?: Prisma.AuditLogMinOrderByAggregateInput;
-  _sum?: Prisma.AuditLogSumOrderByAggregateInput;
 };
 
 export type AuditLogScalarWhereWithAggregatesInput = {
@@ -536,24 +320,6 @@ export type AuditLogScalarWhereWithAggregatesInput = {
     | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
     | string
     | null;
-  isp?: Prisma.StringNullableWithAggregatesFilter<"AuditLog"> | string | null;
-  region?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  country?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  city?: Prisma.StringNullableWithAggregatesFilter<"AuditLog"> | string | null;
-  latitude?:
-    | Prisma.FloatNullableWithAggregatesFilter<"AuditLog">
-    | number
-    | null;
-  longitude?:
-    | Prisma.FloatNullableWithAggregatesFilter<"AuditLog">
-    | number
-    | null;
   userAgent?:
     | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
     | string
@@ -562,45 +328,6 @@ export type AuditLogScalarWhereWithAggregatesInput = {
     | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
     | string
     | null;
-  deviceName?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  deviceBrand?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  deviceModel?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  osName?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  osVersion?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  browserName?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  browserVersion?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  cpuArch?:
-    | Prisma.StringNullableWithAggregatesFilter<"AuditLog">
-    | string
-    | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeWithAggregatesFilter<"AuditLog">
-    | $Enums.DeviceType;
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"AuditLog">;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AuditLog"> | Date | string;
 };
@@ -612,24 +339,8 @@ export type AuditLogCreateInput = {
   action: $Enums.AuditAction;
   description?: string | null;
   ipAddress?: string | null;
-  isp?: string | null;
-  region?: string | null;
-  country?: string | null;
-  city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   userAgent?: string | null;
   fingerprint?: string | null;
-  deviceName?: string | null;
-  deviceBrand?: string | null;
-  deviceModel?: string | null;
-  osName?: string | null;
-  osVersion?: string | null;
-  browserName?: string | null;
-  browserVersion?: string | null;
-  browserEngine?: string | null;
-  cpuArch?: string | null;
-  deviceType?: $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   user?: Prisma.UserCreateNestedOneWithoutAuditLogsInput;
@@ -643,24 +354,8 @@ export type AuditLogUncheckedCreateInput = {
   action: $Enums.AuditAction;
   description?: string | null;
   ipAddress?: string | null;
-  isp?: string | null;
-  region?: string | null;
-  country?: string | null;
-  city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   userAgent?: string | null;
   fingerprint?: string | null;
-  deviceName?: string | null;
-  deviceBrand?: string | null;
-  deviceModel?: string | null;
-  osName?: string | null;
-  osVersion?: string | null;
-  browserName?: string | null;
-  browserVersion?: string | null;
-  browserEngine?: string | null;
-  cpuArch?: string | null;
-  deviceType?: $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
 };
@@ -676,32 +371,8 @@ export type AuditLogUpdateInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   user?: Prisma.UserUpdateOneWithoutAuditLogsNestedInput;
@@ -719,32 +390,8 @@ export type AuditLogUncheckedUpdateInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -757,24 +404,8 @@ export type AuditLogCreateManyInput = {
   action: $Enums.AuditAction;
   description?: string | null;
   ipAddress?: string | null;
-  isp?: string | null;
-  region?: string | null;
-  country?: string | null;
-  city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   userAgent?: string | null;
   fingerprint?: string | null;
-  deviceName?: string | null;
-  deviceBrand?: string | null;
-  deviceModel?: string | null;
-  osName?: string | null;
-  osVersion?: string | null;
-  browserName?: string | null;
-  browserVersion?: string | null;
-  browserEngine?: string | null;
-  cpuArch?: string | null;
-  deviceType?: $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
 };
@@ -790,32 +421,8 @@ export type AuditLogUpdateManyMutationInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -832,32 +439,8 @@ export type AuditLogUncheckedUpdateManyInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -880,31 +463,10 @@ export type AuditLogCountOrderByAggregateInput = {
   action?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   ipAddress?: Prisma.SortOrder;
-  isp?: Prisma.SortOrder;
-  region?: Prisma.SortOrder;
-  country?: Prisma.SortOrder;
-  city?: Prisma.SortOrder;
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
   userAgent?: Prisma.SortOrder;
   fingerprint?: Prisma.SortOrder;
-  deviceName?: Prisma.SortOrder;
-  deviceBrand?: Prisma.SortOrder;
-  deviceModel?: Prisma.SortOrder;
-  osName?: Prisma.SortOrder;
-  osVersion?: Prisma.SortOrder;
-  browserName?: Prisma.SortOrder;
-  browserVersion?: Prisma.SortOrder;
-  browserEngine?: Prisma.SortOrder;
-  cpuArch?: Prisma.SortOrder;
-  deviceType?: Prisma.SortOrder;
   metadata?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
-};
-
-export type AuditLogAvgOrderByAggregateInput = {
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
 };
 
 export type AuditLogMaxOrderByAggregateInput = {
@@ -915,24 +477,8 @@ export type AuditLogMaxOrderByAggregateInput = {
   action?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   ipAddress?: Prisma.SortOrder;
-  isp?: Prisma.SortOrder;
-  region?: Prisma.SortOrder;
-  country?: Prisma.SortOrder;
-  city?: Prisma.SortOrder;
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
   userAgent?: Prisma.SortOrder;
   fingerprint?: Prisma.SortOrder;
-  deviceName?: Prisma.SortOrder;
-  deviceBrand?: Prisma.SortOrder;
-  deviceModel?: Prisma.SortOrder;
-  osName?: Prisma.SortOrder;
-  osVersion?: Prisma.SortOrder;
-  browserName?: Prisma.SortOrder;
-  browserVersion?: Prisma.SortOrder;
-  browserEngine?: Prisma.SortOrder;
-  cpuArch?: Prisma.SortOrder;
-  deviceType?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
 };
 
@@ -944,30 +490,9 @@ export type AuditLogMinOrderByAggregateInput = {
   action?: Prisma.SortOrder;
   description?: Prisma.SortOrder;
   ipAddress?: Prisma.SortOrder;
-  isp?: Prisma.SortOrder;
-  region?: Prisma.SortOrder;
-  country?: Prisma.SortOrder;
-  city?: Prisma.SortOrder;
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
   userAgent?: Prisma.SortOrder;
   fingerprint?: Prisma.SortOrder;
-  deviceName?: Prisma.SortOrder;
-  deviceBrand?: Prisma.SortOrder;
-  deviceModel?: Prisma.SortOrder;
-  osName?: Prisma.SortOrder;
-  osVersion?: Prisma.SortOrder;
-  browserName?: Prisma.SortOrder;
-  browserVersion?: Prisma.SortOrder;
-  browserEngine?: Prisma.SortOrder;
-  cpuArch?: Prisma.SortOrder;
-  deviceType?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
-};
-
-export type AuditLogSumOrderByAggregateInput = {
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
 };
 
 export type AuditLogCreateNestedManyWithoutUserInput = {
@@ -1079,24 +604,8 @@ export type AuditLogCreateWithoutUserInput = {
   action: $Enums.AuditAction;
   description?: string | null;
   ipAddress?: string | null;
-  isp?: string | null;
-  region?: string | null;
-  country?: string | null;
-  city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   userAgent?: string | null;
   fingerprint?: string | null;
-  deviceName?: string | null;
-  deviceBrand?: string | null;
-  deviceModel?: string | null;
-  osName?: string | null;
-  osVersion?: string | null;
-  browserName?: string | null;
-  browserVersion?: string | null;
-  browserEngine?: string | null;
-  cpuArch?: string | null;
-  deviceType?: $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
 };
@@ -1108,24 +617,8 @@ export type AuditLogUncheckedCreateWithoutUserInput = {
   action: $Enums.AuditAction;
   description?: string | null;
   ipAddress?: string | null;
-  isp?: string | null;
-  region?: string | null;
-  country?: string | null;
-  city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   userAgent?: string | null;
   fingerprint?: string | null;
-  deviceName?: string | null;
-  deviceBrand?: string | null;
-  deviceModel?: string | null;
-  osName?: string | null;
-  osVersion?: string | null;
-  browserName?: string | null;
-  browserVersion?: string | null;
-  browserEngine?: string | null;
-  cpuArch?: string | null;
-  deviceType?: $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
 };
@@ -1184,24 +677,8 @@ export type AuditLogScalarWhereInput = {
   action?: Prisma.EnumAuditActionFilter<"AuditLog"> | $Enums.AuditAction;
   description?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
   ipAddress?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  isp?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  region?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  country?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  city?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  latitude?: Prisma.FloatNullableFilter<"AuditLog"> | number | null;
-  longitude?: Prisma.FloatNullableFilter<"AuditLog"> | number | null;
   userAgent?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
   fingerprint?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceBrand?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceModel?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  osName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  osVersion?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  browserName?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  browserVersion?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  browserEngine?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  cpuArch?: Prisma.StringNullableFilter<"AuditLog"> | string | null;
-  deviceType?: Prisma.EnumDeviceTypeFilter<"AuditLog"> | $Enums.DeviceType;
   metadata?: Prisma.JsonNullableFilter<"AuditLog">;
   createdAt?: Prisma.DateTimeFilter<"AuditLog"> | Date | string;
 };
@@ -1213,24 +690,8 @@ export type AuditLogCreateManyUserInput = {
   action: $Enums.AuditAction;
   description?: string | null;
   ipAddress?: string | null;
-  isp?: string | null;
-  region?: string | null;
-  country?: string | null;
-  city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   userAgent?: string | null;
   fingerprint?: string | null;
-  deviceName?: string | null;
-  deviceBrand?: string | null;
-  deviceModel?: string | null;
-  osName?: string | null;
-  osVersion?: string | null;
-  browserName?: string | null;
-  browserVersion?: string | null;
-  browserEngine?: string | null;
-  cpuArch?: string | null;
-  deviceType?: $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
 };
@@ -1246,32 +707,8 @@ export type AuditLogUpdateWithoutUserInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1287,32 +724,8 @@ export type AuditLogUncheckedUpdateWithoutUserInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1328,32 +741,8 @@ export type AuditLogUncheckedUpdateManyWithoutUserInput = {
     | $Enums.AuditAction;
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  isp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceBrand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  osVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  browserVersion?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  browserEngine?:
-    | Prisma.NullableStringFieldUpdateOperationsInput
-    | string
-    | null;
-  cpuArch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  deviceType?:
-    | Prisma.EnumDeviceTypeFieldUpdateOperationsInput
-    | $Enums.DeviceType;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1370,24 +759,8 @@ export type AuditLogSelect<
     action?: boolean;
     description?: boolean;
     ipAddress?: boolean;
-    isp?: boolean;
-    region?: boolean;
-    country?: boolean;
-    city?: boolean;
-    latitude?: boolean;
-    longitude?: boolean;
     userAgent?: boolean;
     fingerprint?: boolean;
-    deviceName?: boolean;
-    deviceBrand?: boolean;
-    deviceModel?: boolean;
-    osName?: boolean;
-    osVersion?: boolean;
-    browserName?: boolean;
-    browserVersion?: boolean;
-    browserEngine?: boolean;
-    cpuArch?: boolean;
-    deviceType?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
     user?: boolean | Prisma.AuditLog$userArgs<ExtArgs>;
@@ -1407,24 +780,8 @@ export type AuditLogSelectCreateManyAndReturn<
     action?: boolean;
     description?: boolean;
     ipAddress?: boolean;
-    isp?: boolean;
-    region?: boolean;
-    country?: boolean;
-    city?: boolean;
-    latitude?: boolean;
-    longitude?: boolean;
     userAgent?: boolean;
     fingerprint?: boolean;
-    deviceName?: boolean;
-    deviceBrand?: boolean;
-    deviceModel?: boolean;
-    osName?: boolean;
-    osVersion?: boolean;
-    browserName?: boolean;
-    browserVersion?: boolean;
-    browserEngine?: boolean;
-    cpuArch?: boolean;
-    deviceType?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
     user?: boolean | Prisma.AuditLog$userArgs<ExtArgs>;
@@ -1444,24 +801,8 @@ export type AuditLogSelectUpdateManyAndReturn<
     action?: boolean;
     description?: boolean;
     ipAddress?: boolean;
-    isp?: boolean;
-    region?: boolean;
-    country?: boolean;
-    city?: boolean;
-    latitude?: boolean;
-    longitude?: boolean;
     userAgent?: boolean;
     fingerprint?: boolean;
-    deviceName?: boolean;
-    deviceBrand?: boolean;
-    deviceModel?: boolean;
-    osName?: boolean;
-    osVersion?: boolean;
-    browserName?: boolean;
-    browserVersion?: boolean;
-    browserEngine?: boolean;
-    cpuArch?: boolean;
-    deviceType?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
     user?: boolean | Prisma.AuditLog$userArgs<ExtArgs>;
@@ -1477,24 +818,8 @@ export type AuditLogSelectScalar = {
   action?: boolean;
   description?: boolean;
   ipAddress?: boolean;
-  isp?: boolean;
-  region?: boolean;
-  country?: boolean;
-  city?: boolean;
-  latitude?: boolean;
-  longitude?: boolean;
   userAgent?: boolean;
   fingerprint?: boolean;
-  deviceName?: boolean;
-  deviceBrand?: boolean;
-  deviceModel?: boolean;
-  osName?: boolean;
-  osVersion?: boolean;
-  browserName?: boolean;
-  browserVersion?: boolean;
-  browserEngine?: boolean;
-  cpuArch?: boolean;
-  deviceType?: boolean;
   metadata?: boolean;
   createdAt?: boolean;
 };
@@ -1510,24 +835,8 @@ export type AuditLogOmit<
   | "action"
   | "description"
   | "ipAddress"
-  | "isp"
-  | "region"
-  | "country"
-  | "city"
-  | "latitude"
-  | "longitude"
   | "userAgent"
   | "fingerprint"
-  | "deviceName"
-  | "deviceBrand"
-  | "deviceModel"
-  | "osName"
-  | "osVersion"
-  | "browserName"
-  | "browserVersion"
-  | "browserEngine"
-  | "cpuArch"
-  | "deviceType"
   | "metadata"
   | "createdAt",
   ExtArgs["result"]["auditLog"]
@@ -1568,24 +877,8 @@ export type $AuditLogPayload<
       action: $Enums.AuditAction;
       description: string | null;
       ipAddress: string | null;
-      isp: string | null;
-      region: string | null;
-      country: string | null;
-      city: string | null;
-      latitude: number | null;
-      longitude: number | null;
       userAgent: string | null;
       fingerprint: string | null;
-      deviceName: string | null;
-      deviceBrand: string | null;
-      deviceModel: string | null;
-      osName: string | null;
-      osVersion: string | null;
-      browserName: string | null;
-      browserVersion: string | null;
-      browserEngine: string | null;
-      cpuArch: string | null;
-      deviceType: $Enums.DeviceType;
       metadata: runtime.JsonValue | null;
       createdAt: Date;
     },
@@ -2200,24 +1493,8 @@ export interface AuditLogFieldRefs {
   readonly action: Prisma.FieldRef<"AuditLog", "AuditAction">;
   readonly description: Prisma.FieldRef<"AuditLog", "String">;
   readonly ipAddress: Prisma.FieldRef<"AuditLog", "String">;
-  readonly isp: Prisma.FieldRef<"AuditLog", "String">;
-  readonly region: Prisma.FieldRef<"AuditLog", "String">;
-  readonly country: Prisma.FieldRef<"AuditLog", "String">;
-  readonly city: Prisma.FieldRef<"AuditLog", "String">;
-  readonly latitude: Prisma.FieldRef<"AuditLog", "Float">;
-  readonly longitude: Prisma.FieldRef<"AuditLog", "Float">;
   readonly userAgent: Prisma.FieldRef<"AuditLog", "String">;
   readonly fingerprint: Prisma.FieldRef<"AuditLog", "String">;
-  readonly deviceName: Prisma.FieldRef<"AuditLog", "String">;
-  readonly deviceBrand: Prisma.FieldRef<"AuditLog", "String">;
-  readonly deviceModel: Prisma.FieldRef<"AuditLog", "String">;
-  readonly osName: Prisma.FieldRef<"AuditLog", "String">;
-  readonly osVersion: Prisma.FieldRef<"AuditLog", "String">;
-  readonly browserName: Prisma.FieldRef<"AuditLog", "String">;
-  readonly browserVersion: Prisma.FieldRef<"AuditLog", "String">;
-  readonly browserEngine: Prisma.FieldRef<"AuditLog", "String">;
-  readonly cpuArch: Prisma.FieldRef<"AuditLog", "String">;
-  readonly deviceType: Prisma.FieldRef<"AuditLog", "DeviceType">;
   readonly metadata: Prisma.FieldRef<"AuditLog", "Json">;
   readonly createdAt: Prisma.FieldRef<"AuditLog", "DateTime">;
 }

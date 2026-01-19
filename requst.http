@@ -3,11 +3,42 @@ POST http://localhost:5000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "firstName": "Test",
-  "lastName": "User",
-  "username": "testuser",
-  "email": "testuser@example.com",
+  "firstName": "Shah Md",
+  "lastName": "Mahi",
+  "username": "shahmdmahi",
+  "email": "shahmdmahi24@gmail.com",
   "phone": "+8801757290258",
   "password": "Iliket90@abc",
   "confirmPassword": "Iliket90@abc"
+}
+
+
+###
+# Resend Verification Email
+POST http://localhost:5000/api/v1/auth/resend-verification
+Content-Type: application/json
+
+{
+  "email": "shahmdmahi24@gmail.com"
+}
+
+
+###
+# Verify Email
+POST http://localhost:5000/api/v1/auth/verify-email
+Content-Type: application/json
+
+{
+  "token": "8ebed04d505a51f956239beab72e8acfc7510f4799d6881d531e01e28365e039"
+}
+
+
+###
+# Login User
+POST http://localhost:5000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "shahmdmahi",
+  "password": "Iliket90@abc"
 }

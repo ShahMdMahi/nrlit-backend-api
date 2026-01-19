@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authController } from "../controllers/auth.controller.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import {
+  loginSchema,
   registerSchema,
   resendVerificationSchema,
   verifyEmailSchema,
@@ -20,5 +21,6 @@ router.post(
   validate(verifyEmailSchema),
   authController.verifyEmail
 );
+router.post("/login", validate(loginSchema), authController.login);
 
 export { router as authRouter };

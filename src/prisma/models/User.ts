@@ -47,8 +47,8 @@ export type UserMinAggregateOutputType = {
   verificationToken: string | null;
   resetPasswordToken: string | null;
   failedLoginAttempts: number | null;
-  twoFactorEnabled: boolean | null;
-  twoFactorSecret: string | null;
+  twoFactorCode: string | null;
+  twoFactorToken: string | null;
   role: $Enums.Role | null;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -60,6 +60,8 @@ export type UserMinAggregateOutputType = {
   lockedUntil: Date | null;
   lastLoginAt: Date | null;
   lastFailedLoginAt: Date | null;
+  twoFactorEnabledAt: Date | null;
+  twoFactorCodeExpiresAt: Date | null;
   verificationTokenExpiredAt: Date | null;
   resetPasswordTokenExpiredAt: Date | null;
 };
@@ -77,8 +79,8 @@ export type UserMaxAggregateOutputType = {
   verificationToken: string | null;
   resetPasswordToken: string | null;
   failedLoginAttempts: number | null;
-  twoFactorEnabled: boolean | null;
-  twoFactorSecret: string | null;
+  twoFactorCode: string | null;
+  twoFactorToken: string | null;
   role: $Enums.Role | null;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -90,6 +92,8 @@ export type UserMaxAggregateOutputType = {
   lockedUntil: Date | null;
   lastLoginAt: Date | null;
   lastFailedLoginAt: Date | null;
+  twoFactorEnabledAt: Date | null;
+  twoFactorCodeExpiresAt: Date | null;
   verificationTokenExpiredAt: Date | null;
   resetPasswordTokenExpiredAt: Date | null;
 };
@@ -107,9 +111,8 @@ export type UserCountAggregateOutputType = {
   verificationToken: number;
   resetPasswordToken: number;
   failedLoginAttempts: number;
-  twoFactorEnabled: number;
-  twoFactorSecret: number;
-  twoFactorBackupCodes: number;
+  twoFactorCode: number;
+  twoFactorToken: number;
   role: number;
   metadata: number;
   createdAt: number;
@@ -122,6 +125,8 @@ export type UserCountAggregateOutputType = {
   lockedUntil: number;
   lastLoginAt: number;
   lastFailedLoginAt: number;
+  twoFactorEnabledAt: number;
+  twoFactorCodeExpiresAt: number;
   verificationTokenExpiredAt: number;
   resetPasswordTokenExpiredAt: number;
   _all: number;
@@ -148,8 +153,8 @@ export type UserMinAggregateInputType = {
   verificationToken?: true;
   resetPasswordToken?: true;
   failedLoginAttempts?: true;
-  twoFactorEnabled?: true;
-  twoFactorSecret?: true;
+  twoFactorCode?: true;
+  twoFactorToken?: true;
   role?: true;
   createdAt?: true;
   updatedAt?: true;
@@ -161,6 +166,8 @@ export type UserMinAggregateInputType = {
   lockedUntil?: true;
   lastLoginAt?: true;
   lastFailedLoginAt?: true;
+  twoFactorEnabledAt?: true;
+  twoFactorCodeExpiresAt?: true;
   verificationTokenExpiredAt?: true;
   resetPasswordTokenExpiredAt?: true;
 };
@@ -178,8 +185,8 @@ export type UserMaxAggregateInputType = {
   verificationToken?: true;
   resetPasswordToken?: true;
   failedLoginAttempts?: true;
-  twoFactorEnabled?: true;
-  twoFactorSecret?: true;
+  twoFactorCode?: true;
+  twoFactorToken?: true;
   role?: true;
   createdAt?: true;
   updatedAt?: true;
@@ -191,6 +198,8 @@ export type UserMaxAggregateInputType = {
   lockedUntil?: true;
   lastLoginAt?: true;
   lastFailedLoginAt?: true;
+  twoFactorEnabledAt?: true;
+  twoFactorCodeExpiresAt?: true;
   verificationTokenExpiredAt?: true;
   resetPasswordTokenExpiredAt?: true;
 };
@@ -208,9 +217,8 @@ export type UserCountAggregateInputType = {
   verificationToken?: true;
   resetPasswordToken?: true;
   failedLoginAttempts?: true;
-  twoFactorEnabled?: true;
-  twoFactorSecret?: true;
-  twoFactorBackupCodes?: true;
+  twoFactorCode?: true;
+  twoFactorToken?: true;
   role?: true;
   metadata?: true;
   createdAt?: true;
@@ -223,6 +231,8 @@ export type UserCountAggregateInputType = {
   lockedUntil?: true;
   lastLoginAt?: true;
   lastFailedLoginAt?: true;
+  twoFactorEnabledAt?: true;
+  twoFactorCodeExpiresAt?: true;
   verificationTokenExpiredAt?: true;
   resetPasswordTokenExpiredAt?: true;
   _all?: true;
@@ -334,9 +344,8 @@ export type UserGroupByOutputType = {
   verificationToken: string | null;
   resetPasswordToken: string | null;
   failedLoginAttempts: number;
-  twoFactorEnabled: boolean;
-  twoFactorSecret: string | null;
-  twoFactorBackupCodes: string[];
+  twoFactorCode: string | null;
+  twoFactorToken: string | null;
   role: $Enums.Role;
   metadata: runtime.JsonValue | null;
   createdAt: Date;
@@ -349,6 +358,8 @@ export type UserGroupByOutputType = {
   lockedUntil: Date | null;
   lastLoginAt: Date | null;
   lastFailedLoginAt: Date | null;
+  twoFactorEnabledAt: Date | null;
+  twoFactorCodeExpiresAt: Date | null;
   verificationTokenExpiredAt: Date | null;
   resetPasswordTokenExpiredAt: Date | null;
   _count: UserCountAggregateOutputType | null;
@@ -386,9 +397,8 @@ export type UserWhereInput = {
   verificationToken?: Prisma.StringNullableFilter<"User"> | string | null;
   resetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null;
   failedLoginAttempts?: Prisma.IntFilter<"User"> | number;
-  twoFactorEnabled?: Prisma.BoolFilter<"User"> | boolean;
-  twoFactorSecret?: Prisma.StringNullableFilter<"User"> | string | null;
-  twoFactorBackupCodes?: Prisma.StringNullableListFilter<"User">;
+  twoFactorCode?: Prisma.StringNullableFilter<"User"> | string | null;
+  twoFactorToken?: Prisma.StringNullableFilter<"User"> | string | null;
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role;
   metadata?: Prisma.JsonNullableFilter<"User">;
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -401,6 +411,16 @@ export type UserWhereInput = {
   lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
   lastFailedLoginAt?:
+    | Prisma.DateTimeNullableFilter<"User">
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.DateTimeNullableFilter<"User">
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.DateTimeNullableFilter<"User">
     | Date
     | string
@@ -436,9 +456,8 @@ export type UserOrderByWithRelationInput = {
   verificationToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   failedLoginAttempts?: Prisma.SortOrder;
-  twoFactorEnabled?: Prisma.SortOrder;
-  twoFactorSecret?: Prisma.SortOrderInput | Prisma.SortOrder;
-  twoFactorBackupCodes?: Prisma.SortOrder;
+  twoFactorCode?: Prisma.SortOrderInput | Prisma.SortOrder;
+  twoFactorToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   role?: Prisma.SortOrder;
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -451,6 +470,8 @@ export type UserOrderByWithRelationInput = {
   lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder;
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   lastFailedLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+  twoFactorEnabledAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+  twoFactorCodeExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   verificationTokenExpiredAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   resetPasswordTokenExpiredAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   sessions?: Prisma.SessionOrderByRelationAggregateInput;
@@ -464,6 +485,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     email?: string;
     username?: string;
     phone?: string;
+    verificationToken?: string;
+    resetPasswordToken?: string;
     username_email_phone?: Prisma.UserUsernameEmailPhoneCompoundUniqueInput;
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
@@ -473,12 +496,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     password?: Prisma.StringFilter<"User"> | string;
     avatar?: Prisma.StringNullableFilter<"User"> | string | null;
     dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
-    verificationToken?: Prisma.StringNullableFilter<"User"> | string | null;
-    resetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null;
     failedLoginAttempts?: Prisma.IntFilter<"User"> | number;
-    twoFactorEnabled?: Prisma.BoolFilter<"User"> | boolean;
-    twoFactorSecret?: Prisma.StringNullableFilter<"User"> | string | null;
-    twoFactorBackupCodes?: Prisma.StringNullableListFilter<"User">;
+    twoFactorCode?: Prisma.StringNullableFilter<"User"> | string | null;
+    twoFactorToken?: Prisma.StringNullableFilter<"User"> | string | null;
     role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role;
     metadata?: Prisma.JsonNullableFilter<"User">;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -491,6 +511,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     lastFailedLoginAt?:
+      | Prisma.DateTimeNullableFilter<"User">
+      | Date
+      | string
+      | null;
+    twoFactorEnabledAt?:
+      | Prisma.DateTimeNullableFilter<"User">
+      | Date
+      | string
+      | null;
+    twoFactorCodeExpiresAt?:
       | Prisma.DateTimeNullableFilter<"User">
       | Date
       | string
@@ -512,7 +542,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     > | null;
     auditLogs?: Prisma.AuditLogListRelationFilter;
   },
-  "id" | "email" | "username" | "phone" | "username_email_phone"
+  | "id"
+  | "email"
+  | "username"
+  | "phone"
+  | "verificationToken"
+  | "resetPasswordToken"
+  | "username_email_phone"
 >;
 
 export type UserOrderByWithAggregationInput = {
@@ -528,9 +564,8 @@ export type UserOrderByWithAggregationInput = {
   verificationToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   failedLoginAttempts?: Prisma.SortOrder;
-  twoFactorEnabled?: Prisma.SortOrder;
-  twoFactorSecret?: Prisma.SortOrderInput | Prisma.SortOrder;
-  twoFactorBackupCodes?: Prisma.SortOrder;
+  twoFactorCode?: Prisma.SortOrderInput | Prisma.SortOrder;
+  twoFactorToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   role?: Prisma.SortOrder;
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -543,6 +578,8 @@ export type UserOrderByWithAggregationInput = {
   lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder;
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   lastFailedLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+  twoFactorEnabledAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+  twoFactorCodeExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   verificationTokenExpiredAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   resetPasswordTokenExpiredAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   _count?: Prisma.UserCountOrderByAggregateInput;
@@ -582,12 +619,14 @@ export type UserScalarWhereWithAggregatesInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number;
-  twoFactorEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.StringNullableWithAggregatesFilter<"User">
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.StringNullableListFilter<"User">;
+  twoFactorToken?:
+    | Prisma.StringNullableWithAggregatesFilter<"User">
+    | string
+    | null;
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role;
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"User">;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
@@ -632,6 +671,16 @@ export type UserScalarWhereWithAggregatesInput = {
     | Date
     | string
     | null;
+  twoFactorEnabledAt?:
+    | Prisma.DateTimeNullableWithAggregatesFilter<"User">
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
+    | Prisma.DateTimeNullableWithAggregatesFilter<"User">
+    | Date
+    | string
+    | null;
   verificationTokenExpiredAt?:
     | Prisma.DateTimeNullableWithAggregatesFilter<"User">
     | Date
@@ -657,9 +706,8 @@ export type UserCreateInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -672,6 +720,8 @@ export type UserCreateInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
@@ -692,9 +742,8 @@ export type UserUncheckedCreateInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -707,6 +756,8 @@ export type UserUncheckedCreateInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
@@ -737,12 +788,14 @@ export type UserUpdateInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -783,6 +836,16 @@ export type UserUpdateInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -825,12 +888,14 @@ export type UserUncheckedUpdateInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -871,6 +936,16 @@ export type UserUncheckedUpdateInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -903,9 +978,8 @@ export type UserCreateManyInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -918,6 +992,8 @@ export type UserCreateManyInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
 };
@@ -945,12 +1021,14 @@ export type UserUpdateManyMutationInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -991,6 +1069,16 @@ export type UserUpdateManyMutationInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -1030,12 +1118,14 @@ export type UserUncheckedUpdateManyInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1080,6 +1170,16 @@ export type UserUncheckedUpdateManyInput = {
     | Date
     | string
     | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   verificationTokenExpiredAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1090,14 +1190,6 @@ export type UserUncheckedUpdateManyInput = {
     | Date
     | string
     | null;
-};
-
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null;
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null;
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>;
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>;
-  isEmpty?: boolean;
 };
 
 export type UserUsernameEmailPhoneCompoundUniqueInput = {
@@ -1119,9 +1211,8 @@ export type UserCountOrderByAggregateInput = {
   verificationToken?: Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrder;
   failedLoginAttempts?: Prisma.SortOrder;
-  twoFactorEnabled?: Prisma.SortOrder;
-  twoFactorSecret?: Prisma.SortOrder;
-  twoFactorBackupCodes?: Prisma.SortOrder;
+  twoFactorCode?: Prisma.SortOrder;
+  twoFactorToken?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   metadata?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -1134,6 +1225,8 @@ export type UserCountOrderByAggregateInput = {
   lockedUntil?: Prisma.SortOrder;
   lastLoginAt?: Prisma.SortOrder;
   lastFailedLoginAt?: Prisma.SortOrder;
+  twoFactorEnabledAt?: Prisma.SortOrder;
+  twoFactorCodeExpiresAt?: Prisma.SortOrder;
   verificationTokenExpiredAt?: Prisma.SortOrder;
   resetPasswordTokenExpiredAt?: Prisma.SortOrder;
 };
@@ -1155,8 +1248,8 @@ export type UserMaxOrderByAggregateInput = {
   verificationToken?: Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrder;
   failedLoginAttempts?: Prisma.SortOrder;
-  twoFactorEnabled?: Prisma.SortOrder;
-  twoFactorSecret?: Prisma.SortOrder;
+  twoFactorCode?: Prisma.SortOrder;
+  twoFactorToken?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
@@ -1168,6 +1261,8 @@ export type UserMaxOrderByAggregateInput = {
   lockedUntil?: Prisma.SortOrder;
   lastLoginAt?: Prisma.SortOrder;
   lastFailedLoginAt?: Prisma.SortOrder;
+  twoFactorEnabledAt?: Prisma.SortOrder;
+  twoFactorCodeExpiresAt?: Prisma.SortOrder;
   verificationTokenExpiredAt?: Prisma.SortOrder;
   resetPasswordTokenExpiredAt?: Prisma.SortOrder;
 };
@@ -1185,8 +1280,8 @@ export type UserMinOrderByAggregateInput = {
   verificationToken?: Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrder;
   failedLoginAttempts?: Prisma.SortOrder;
-  twoFactorEnabled?: Prisma.SortOrder;
-  twoFactorSecret?: Prisma.SortOrder;
+  twoFactorCode?: Prisma.SortOrder;
+  twoFactorToken?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
@@ -1198,6 +1293,8 @@ export type UserMinOrderByAggregateInput = {
   lockedUntil?: Prisma.SortOrder;
   lastLoginAt?: Prisma.SortOrder;
   lastFailedLoginAt?: Prisma.SortOrder;
+  twoFactorEnabledAt?: Prisma.SortOrder;
+  twoFactorCodeExpiresAt?: Prisma.SortOrder;
   verificationTokenExpiredAt?: Prisma.SortOrder;
   resetPasswordTokenExpiredAt?: Prisma.SortOrder;
 };
@@ -1214,10 +1311,6 @@ export type UserScalarRelationFilter = {
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null;
   isNot?: Prisma.UserWhereInput | null;
-};
-
-export type UserCreatetwoFactorBackupCodesInput = {
-  set: string[];
 };
 
 export type StringFieldUpdateOperationsInput = {
@@ -1238,15 +1331,6 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number;
   multiply?: number;
   divide?: number;
-};
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean;
-};
-
-export type UserUpdatetwoFactorBackupCodesInput = {
-  set?: string[];
-  push?: string | string[];
 };
 
 export type EnumRoleFieldUpdateOperationsInput = {
@@ -1350,9 +1434,8 @@ export type UserCreateWithoutSessionsInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1365,6 +1448,8 @@ export type UserCreateWithoutSessionsInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   blogProfile?: Prisma.BlogProfileCreateNestedOneWithoutUserInput;
@@ -1384,9 +1469,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1399,6 +1483,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   blogProfile?: Prisma.BlogProfileUncheckedCreateNestedOneWithoutUserInput;
@@ -1456,12 +1542,14 @@ export type UserUpdateWithoutSessionsInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1502,6 +1590,16 @@ export type UserUpdateWithoutSessionsInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -1543,12 +1641,14 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1593,6 +1693,16 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     | Date
     | string
     | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   verificationTokenExpiredAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1620,9 +1730,8 @@ export type UserCreateWithoutBlogProfileInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1635,6 +1744,8 @@ export type UserCreateWithoutBlogProfileInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
@@ -1654,9 +1765,8 @@ export type UserUncheckedCreateWithoutBlogProfileInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1669,6 +1779,8 @@ export type UserUncheckedCreateWithoutBlogProfileInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
@@ -1726,12 +1838,14 @@ export type UserUpdateWithoutBlogProfileInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1772,6 +1886,16 @@ export type UserUpdateWithoutBlogProfileInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -1813,12 +1937,14 @@ export type UserUncheckedUpdateWithoutBlogProfileInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1863,6 +1989,16 @@ export type UserUncheckedUpdateWithoutBlogProfileInput = {
     | Date
     | string
     | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
   verificationTokenExpiredAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1890,9 +2026,8 @@ export type UserCreateWithoutAuditLogsInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1905,6 +2040,8 @@ export type UserCreateWithoutAuditLogsInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput;
@@ -1924,9 +2061,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
   failedLoginAttempts?: number;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: string | null;
-  twoFactorBackupCodes?: Prisma.UserCreatetwoFactorBackupCodesInput | string[];
+  twoFactorCode?: string | null;
+  twoFactorToken?: string | null;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1939,6 +2075,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   lockedUntil?: Date | string | null;
   lastLoginAt?: Date | string | null;
   lastFailedLoginAt?: Date | string | null;
+  twoFactorEnabledAt?: Date | string | null;
+  twoFactorCodeExpiresAt?: Date | string | null;
   verificationTokenExpiredAt?: Date | string | null;
   resetPasswordTokenExpiredAt?: Date | string | null;
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput;
@@ -1996,12 +2134,14 @@ export type UserUpdateWithoutAuditLogsInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2042,6 +2182,16 @@ export type UserUpdateWithoutAuditLogsInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -2083,12 +2233,14 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     | string
     | null;
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-  twoFactorSecret?:
+  twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  twoFactorBackupCodes?: Prisma.UserUpdatetwoFactorBackupCodesInput | string[];
+  twoFactorToken?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2129,6 +2281,16 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     | string
     | null;
   lastFailedLoginAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorEnabledAt?:
+    | Prisma.NullableDateTimeFieldUpdateOperationsInput
+    | Date
+    | string
+    | null;
+  twoFactorCodeExpiresAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
     | string
@@ -2214,9 +2376,8 @@ export type UserSelect<
     verificationToken?: boolean;
     resetPasswordToken?: boolean;
     failedLoginAttempts?: boolean;
-    twoFactorEnabled?: boolean;
-    twoFactorSecret?: boolean;
-    twoFactorBackupCodes?: boolean;
+    twoFactorCode?: boolean;
+    twoFactorToken?: boolean;
     role?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -2229,6 +2390,8 @@ export type UserSelect<
     lockedUntil?: boolean;
     lastLoginAt?: boolean;
     lastFailedLoginAt?: boolean;
+    twoFactorEnabledAt?: boolean;
+    twoFactorCodeExpiresAt?: boolean;
     verificationTokenExpiredAt?: boolean;
     resetPasswordTokenExpiredAt?: boolean;
     sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>;
@@ -2256,9 +2419,8 @@ export type UserSelectCreateManyAndReturn<
     verificationToken?: boolean;
     resetPasswordToken?: boolean;
     failedLoginAttempts?: boolean;
-    twoFactorEnabled?: boolean;
-    twoFactorSecret?: boolean;
-    twoFactorBackupCodes?: boolean;
+    twoFactorCode?: boolean;
+    twoFactorToken?: boolean;
     role?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -2271,6 +2433,8 @@ export type UserSelectCreateManyAndReturn<
     lockedUntil?: boolean;
     lastLoginAt?: boolean;
     lastFailedLoginAt?: boolean;
+    twoFactorEnabledAt?: boolean;
+    twoFactorCodeExpiresAt?: boolean;
     verificationTokenExpiredAt?: boolean;
     resetPasswordTokenExpiredAt?: boolean;
   },
@@ -2294,9 +2458,8 @@ export type UserSelectUpdateManyAndReturn<
     verificationToken?: boolean;
     resetPasswordToken?: boolean;
     failedLoginAttempts?: boolean;
-    twoFactorEnabled?: boolean;
-    twoFactorSecret?: boolean;
-    twoFactorBackupCodes?: boolean;
+    twoFactorCode?: boolean;
+    twoFactorToken?: boolean;
     role?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -2309,6 +2472,8 @@ export type UserSelectUpdateManyAndReturn<
     lockedUntil?: boolean;
     lastLoginAt?: boolean;
     lastFailedLoginAt?: boolean;
+    twoFactorEnabledAt?: boolean;
+    twoFactorCodeExpiresAt?: boolean;
     verificationTokenExpiredAt?: boolean;
     resetPasswordTokenExpiredAt?: boolean;
   },
@@ -2328,9 +2493,8 @@ export type UserSelectScalar = {
   verificationToken?: boolean;
   resetPasswordToken?: boolean;
   failedLoginAttempts?: boolean;
-  twoFactorEnabled?: boolean;
-  twoFactorSecret?: boolean;
-  twoFactorBackupCodes?: boolean;
+  twoFactorCode?: boolean;
+  twoFactorToken?: boolean;
   role?: boolean;
   metadata?: boolean;
   createdAt?: boolean;
@@ -2343,6 +2507,8 @@ export type UserSelectScalar = {
   lockedUntil?: boolean;
   lastLoginAt?: boolean;
   lastFailedLoginAt?: boolean;
+  twoFactorEnabledAt?: boolean;
+  twoFactorCodeExpiresAt?: boolean;
   verificationTokenExpiredAt?: boolean;
   resetPasswordTokenExpiredAt?: boolean;
 };
@@ -2363,9 +2529,8 @@ export type UserOmit<
   | "verificationToken"
   | "resetPasswordToken"
   | "failedLoginAttempts"
-  | "twoFactorEnabled"
-  | "twoFactorSecret"
-  | "twoFactorBackupCodes"
+  | "twoFactorCode"
+  | "twoFactorToken"
   | "role"
   | "metadata"
   | "createdAt"
@@ -2378,6 +2543,8 @@ export type UserOmit<
   | "lockedUntil"
   | "lastLoginAt"
   | "lastFailedLoginAt"
+  | "twoFactorEnabledAt"
+  | "twoFactorCodeExpiresAt"
   | "verificationTokenExpiredAt"
   | "resetPasswordTokenExpiredAt",
   ExtArgs["result"]["user"]
@@ -2424,9 +2591,8 @@ export type $UserPayload<
       verificationToken: string | null;
       resetPasswordToken: string | null;
       failedLoginAttempts: number;
-      twoFactorEnabled: boolean;
-      twoFactorSecret: string | null;
-      twoFactorBackupCodes: string[];
+      twoFactorCode: string | null;
+      twoFactorToken: string | null;
       role: $Enums.Role;
       metadata: runtime.JsonValue | null;
       createdAt: Date;
@@ -2439,6 +2605,8 @@ export type $UserPayload<
       lockedUntil: Date | null;
       lastLoginAt: Date | null;
       lastFailedLoginAt: Date | null;
+      twoFactorEnabledAt: Date | null;
+      twoFactorCodeExpiresAt: Date | null;
       verificationTokenExpiredAt: Date | null;
       resetPasswordTokenExpiredAt: Date | null;
     },
@@ -3080,9 +3248,8 @@ export interface UserFieldRefs {
   readonly verificationToken: Prisma.FieldRef<"User", "String">;
   readonly resetPasswordToken: Prisma.FieldRef<"User", "String">;
   readonly failedLoginAttempts: Prisma.FieldRef<"User", "Int">;
-  readonly twoFactorEnabled: Prisma.FieldRef<"User", "Boolean">;
-  readonly twoFactorSecret: Prisma.FieldRef<"User", "String">;
-  readonly twoFactorBackupCodes: Prisma.FieldRef<"User", "String[]">;
+  readonly twoFactorCode: Prisma.FieldRef<"User", "String">;
+  readonly twoFactorToken: Prisma.FieldRef<"User", "String">;
   readonly role: Prisma.FieldRef<"User", "Role">;
   readonly metadata: Prisma.FieldRef<"User", "Json">;
   readonly createdAt: Prisma.FieldRef<"User", "DateTime">;
@@ -3095,6 +3262,8 @@ export interface UserFieldRefs {
   readonly lockedUntil: Prisma.FieldRef<"User", "DateTime">;
   readonly lastLoginAt: Prisma.FieldRef<"User", "DateTime">;
   readonly lastFailedLoginAt: Prisma.FieldRef<"User", "DateTime">;
+  readonly twoFactorEnabledAt: Prisma.FieldRef<"User", "DateTime">;
+  readonly twoFactorCodeExpiresAt: Prisma.FieldRef<"User", "DateTime">;
   readonly verificationTokenExpiredAt: Prisma.FieldRef<"User", "DateTime">;
   readonly resetPasswordTokenExpiredAt: Prisma.FieldRef<"User", "DateTime">;
 }

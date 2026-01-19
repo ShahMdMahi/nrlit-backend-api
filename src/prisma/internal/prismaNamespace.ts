@@ -957,9 +957,8 @@ export const UserScalarFieldEnum = {
   verificationToken: "verificationToken",
   resetPasswordToken: "resetPasswordToken",
   failedLoginAttempts: "failedLoginAttempts",
-  twoFactorEnabled: "twoFactorEnabled",
-  twoFactorSecret: "twoFactorSecret",
-  twoFactorBackupCodes: "twoFactorBackupCodes",
+  twoFactorCode: "twoFactorCode",
+  twoFactorToken: "twoFactorToken",
   role: "role",
   metadata: "metadata",
   createdAt: "createdAt",
@@ -972,6 +971,8 @@ export const UserScalarFieldEnum = {
   lockedUntil: "lockedUntil",
   lastLoginAt: "lastLoginAt",
   lastFailedLoginAt: "lastFailedLoginAt",
+  twoFactorEnabledAt: "twoFactorEnabledAt",
+  twoFactorCodeExpiresAt: "twoFactorCodeExpiresAt",
   verificationTokenExpiredAt: "verificationTokenExpiredAt",
   resetPasswordTokenExpiredAt: "resetPasswordTokenExpiredAt",
 } as const;
@@ -1005,7 +1006,6 @@ export const SessionScalarFieldEnum = {
   metadata: "metadata",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
-  deletedAt: "deletedAt",
   accessedAt: "accessedAt",
   expiredAt: "expiredAt",
   revokedAt: "revokedAt",
@@ -1073,24 +1073,8 @@ export const AuditLogScalarFieldEnum = {
   action: "action",
   description: "description",
   ipAddress: "ipAddress",
-  isp: "isp",
-  region: "region",
-  country: "country",
-  city: "city",
-  latitude: "latitude",
-  longitude: "longitude",
   userAgent: "userAgent",
   fingerprint: "fingerprint",
-  deviceName: "deviceName",
-  deviceBrand: "deviceBrand",
-  deviceModel: "deviceModel",
-  osName: "osName",
-  osVersion: "osVersion",
-  browserName: "browserName",
-  browserVersion: "browserVersion",
-  browserEngine: "browserEngine",
-  cpuArch: "cpuArch",
-  deviceType: "deviceType",
   metadata: "metadata",
   createdAt: "createdAt",
 } as const;
@@ -1189,14 +1173,6 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<
 >;
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
-  $PrismaModel,
-  "Boolean"
->;
-
-/**
  * Reference to a field of type 'Role'
  */
 export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -1226,22 +1202,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<
   $PrismaModel,
   "QueryMode"
->;
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<
-  $PrismaModel,
-  "Float"
->;
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<
-  $PrismaModel,
-  "Float[]"
 >;
 
 /**
@@ -1328,6 +1288,22 @@ export type EnumAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumAuditActionFieldRefInput<$PrismaModel> = FieldRefInputType<
   $PrismaModel,
   "AuditAction[]"
+>;
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  "Float"
+>;
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  "Float[]"
 >;
 
 /**

@@ -8,4 +8,9 @@ export const env = cleanEnv(process.env, {
   COOKIE_SECRET: str(),
   ALLOWED_ORIGINS: str(),
   API_SECRET: str(),
+  TELEGRAM_BOT_TOKEN: str(),
+  TELEGRAM_CHAT_ID: str(),
+  RESEND_API_KEY: str(),
+  EMAIL_FROM: str(),
+  FRONTEND_BASE_URL: url(),
 });

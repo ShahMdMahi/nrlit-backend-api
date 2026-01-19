@@ -17,6 +17,11 @@ import { xssSanitizeMiddleware } from "./middlewares/xss-sanitize.middleware.js"
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { authRouter } from "./routes/auth.route.js";
 import { logger } from "./utils/logger.js";
+import { telegramBot } from "./libs/telegram.js";
+import { Server } from "http";
+import { verifyEmailConnection } from "./libs/nodemailer.js";
+import { prisma, verifyDbConnection } from "./libs/db.js";
+import { promisify } from "util";
 
 const app: Express = express();
 const PORT = env.PORT;
@@ -67,24 +72,94 @@ app.use((req: Request, res: Response) => {
 // 9. Error Handling
 app.use(errorHandler);
 
-const server = app.listen(PORT, () => {
-  logger.info(
-    `Server is running at http://localhost:${PORT} in ${NODE_ENV} mode.`
-  );
-});
+const startServer = async () => {
+  let server: Server;
 
-const shutdown = (signal: string) => {
-  logger.info(`${signal} received. Starting graceful shutdown...`);
-  server.close(() => {
-    logger.info("Process terminated. Closed all active connections.");
-    process.exit(0);
-  });
+  try {
+    // Ensure core infrastructure is ready
+    await verifyDbConnection();
+    await verifyEmailConnection();
 
-  setTimeout(() => {
-    logger.error("Could not close connections in time, forcing shutdown.");
+    // 1. Start Express
+    server = app.listen(PORT, () => {
+      logger.info(
+        `Server running at http://localhost:${PORT} in ${NODE_ENV} mode.`
+      );
+    });
+
+    // 2. Start Telegram bot (Asynchronous/Non-blocking)
+    // We do not await this so the HTTP server can remain healthy even if Telegram is slow
+    telegramBot
+      .launch()
+      .catch((err) => logger.error("Telegram bot failed to start:", { err }));
+
+    telegramBot.telegram.getMe().then((botInfo) => {
+      logger.info(
+        `🤖 Telegram bot started successfully as @${botInfo.username}`
+      );
+    });
+
+    // 3. Graceful Shutdown Logic
+    const shutdown = async (signal: string) => {
+      logger.info(`${signal} received. Starting graceful shutdown...`);
+
+      // Force exit if cleanup takes too long (e.g., hanging sockets)
+      const forceExit = setTimeout(() => {
+        logger.error("Graceful shutdown timed out. Forcing exit.");
+        process.exit(1);
+      }, 10000);
+
+      try {
+        // Stop Telegram Bot
+        if (telegramBot) {
+          await telegramBot.stop(signal);
+          logger.info("Telegram bot stopped.");
+        }
+
+        // Stop Express Server (Stops accepting new connections)
+        if (server) {
+          await promisify(server.close.bind(server))();
+          logger.info("Express server closed.");
+        }
+
+        // Close Database (Critical: prevents connection leaks)
+        if (typeof prisma !== "undefined" && prisma.$disconnect) {
+          await prisma.$disconnect();
+          logger.info("Database connection closed.");
+        }
+
+        clearTimeout(forceExit);
+        logger.info("Shutdown successful.");
+        process.exit(0);
+      } catch (err) {
+        logger.error("Error during shutdown:", { err });
+        process.exit(1);
+      }
+    };
+
+    // Listen for termination signals
+    process.on("SIGTERM", () => shutdown("SIGTERM"));
+    process.on("SIGINT", () => shutdown("SIGINT"));
+  } catch (error) {
+    logger.error("Failed to start application:", { error });
     process.exit(1);
-  }, 10000);
+  }
 };
 
-process.on("SIGTERM", () => shutdown("SIGTERM"));
-process.on("SIGINT", () => shutdown("SIGINT"));
+/**
+ * GLOBAL PROCESS ERROR HANDLERS
+ */
+process.on("unhandledRejection", (reason) => {
+  logger.error("Unhandled Promise Rejection:", { reason });
+  // In 2026, it is best practice to let the process crash/restart on unhandled rejections
+  // to avoid unpredictable state.
+  process.exit(1);
+});
+
+process.on("uncaughtException", (error) => {
+  logger.error("Uncaught Exception! Check your logic:", { error });
+  process.exit(1);
+});
+
+// Run the application
+startServer();

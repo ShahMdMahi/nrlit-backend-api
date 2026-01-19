@@ -20,20 +20,8 @@ export type SessionModel =
 
 export type AggregateSession = {
   _count: SessionCountAggregateOutputType | null;
-  _avg: SessionAvgAggregateOutputType | null;
-  _sum: SessionSumAggregateOutputType | null;
   _min: SessionMinAggregateOutputType | null;
   _max: SessionMaxAggregateOutputType | null;
-};
-
-export type SessionAvgAggregateOutputType = {
-  latitude: number | null;
-  longitude: number | null;
-};
-
-export type SessionSumAggregateOutputType = {
-  latitude: number | null;
-  longitude: number | null;
 };
 
 export type SessionMinAggregateOutputType = {
@@ -45,8 +33,8 @@ export type SessionMinAggregateOutputType = {
   region: string | null;
   country: string | null;
   city: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  latitude: string | null;
+  longitude: string | null;
   userAgent: string | null;
   fingerprint: string | null;
   deviceName: string | null;
@@ -61,7 +49,6 @@ export type SessionMinAggregateOutputType = {
   deviceType: $Enums.DeviceType | null;
   createdAt: Date | null;
   updatedAt: Date | null;
-  deletedAt: Date | null;
   accessedAt: Date | null;
   expiredAt: Date | null;
   revokedAt: Date | null;
@@ -76,8 +63,8 @@ export type SessionMaxAggregateOutputType = {
   region: string | null;
   country: string | null;
   city: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  latitude: string | null;
+  longitude: string | null;
   userAgent: string | null;
   fingerprint: string | null;
   deviceName: string | null;
@@ -92,7 +79,6 @@ export type SessionMaxAggregateOutputType = {
   deviceType: $Enums.DeviceType | null;
   createdAt: Date | null;
   updatedAt: Date | null;
-  deletedAt: Date | null;
   accessedAt: Date | null;
   expiredAt: Date | null;
   revokedAt: Date | null;
@@ -124,21 +110,10 @@ export type SessionCountAggregateOutputType = {
   metadata: number;
   createdAt: number;
   updatedAt: number;
-  deletedAt: number;
   accessedAt: number;
   expiredAt: number;
   revokedAt: number;
   _all: number;
-};
-
-export type SessionAvgAggregateInputType = {
-  latitude?: true;
-  longitude?: true;
-};
-
-export type SessionSumAggregateInputType = {
-  latitude?: true;
-  longitude?: true;
 };
 
 export type SessionMinAggregateInputType = {
@@ -166,7 +141,6 @@ export type SessionMinAggregateInputType = {
   deviceType?: true;
   createdAt?: true;
   updatedAt?: true;
-  deletedAt?: true;
   accessedAt?: true;
   expiredAt?: true;
   revokedAt?: true;
@@ -197,7 +171,6 @@ export type SessionMaxAggregateInputType = {
   deviceType?: true;
   createdAt?: true;
   updatedAt?: true;
-  deletedAt?: true;
   accessedAt?: true;
   expiredAt?: true;
   revokedAt?: true;
@@ -229,7 +202,6 @@ export type SessionCountAggregateInputType = {
   metadata?: true;
   createdAt?: true;
   updatedAt?: true;
-  deletedAt?: true;
   accessedAt?: true;
   expiredAt?: true;
   revokedAt?: true;
@@ -279,18 +251,6 @@ export type SessionAggregateArgs<
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    *
-   * Select which fields to average
-   **/
-  _avg?: SessionAvgAggregateInputType;
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   *
-   * Select which fields to sum
-   **/
-  _sum?: SessionSumAggregateInputType;
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   *
    * Select which fields to find the minimum value
    **/
   _min?: SessionMinAggregateInputType;
@@ -323,8 +283,6 @@ export type SessionGroupByArgs<
   take?: number;
   skip?: number;
   _count?: SessionCountAggregateInputType | true;
-  _avg?: SessionAvgAggregateInputType;
-  _sum?: SessionSumAggregateInputType;
   _min?: SessionMinAggregateInputType;
   _max?: SessionMaxAggregateInputType;
 };
@@ -338,8 +296,8 @@ export type SessionGroupByOutputType = {
   region: string | null;
   country: string | null;
   city: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  latitude: string | null;
+  longitude: string | null;
   userAgent: string | null;
   fingerprint: string | null;
   deviceName: string | null;
@@ -355,13 +313,10 @@ export type SessionGroupByOutputType = {
   metadata: runtime.JsonValue | null;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
   accessedAt: Date;
-  expiredAt: Date | null;
+  expiredAt: Date;
   revokedAt: Date | null;
   _count: SessionCountAggregateOutputType | null;
-  _avg: SessionAvgAggregateOutputType | null;
-  _sum: SessionSumAggregateOutputType | null;
   _min: SessionMinAggregateOutputType | null;
   _max: SessionMaxAggregateOutputType | null;
 };
@@ -391,8 +346,8 @@ export type SessionWhereInput = {
   region?: Prisma.StringNullableFilter<"Session"> | string | null;
   country?: Prisma.StringNullableFilter<"Session"> | string | null;
   city?: Prisma.StringNullableFilter<"Session"> | string | null;
-  latitude?: Prisma.FloatNullableFilter<"Session"> | number | null;
-  longitude?: Prisma.FloatNullableFilter<"Session"> | number | null;
+  latitude?: Prisma.StringNullableFilter<"Session"> | string | null;
+  longitude?: Prisma.StringNullableFilter<"Session"> | string | null;
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null;
   fingerprint?: Prisma.StringNullableFilter<"Session"> | string | null;
   deviceName?: Prisma.StringNullableFilter<"Session"> | string | null;
@@ -408,9 +363,8 @@ export type SessionWhereInput = {
   metadata?: Prisma.JsonNullableFilter<"Session">;
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
-  deletedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
   accessedAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
-  expiredAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
+  expiredAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
   revokedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 };
@@ -441,9 +395,8 @@ export type SessionOrderByWithRelationInput = {
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   accessedAt?: Prisma.SortOrder;
-  expiredAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+  expiredAt?: Prisma.SortOrder;
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   user?: Prisma.UserOrderByWithRelationInput;
 };
@@ -461,8 +414,8 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<
     region?: Prisma.StringNullableFilter<"Session"> | string | null;
     country?: Prisma.StringNullableFilter<"Session"> | string | null;
     city?: Prisma.StringNullableFilter<"Session"> | string | null;
-    latitude?: Prisma.FloatNullableFilter<"Session"> | number | null;
-    longitude?: Prisma.FloatNullableFilter<"Session"> | number | null;
+    latitude?: Prisma.StringNullableFilter<"Session"> | string | null;
+    longitude?: Prisma.StringNullableFilter<"Session"> | string | null;
     userAgent?: Prisma.StringNullableFilter<"Session"> | string | null;
     fingerprint?: Prisma.StringNullableFilter<"Session"> | string | null;
     deviceName?: Prisma.StringNullableFilter<"Session"> | string | null;
@@ -478,9 +431,8 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<
     metadata?: Prisma.JsonNullableFilter<"Session">;
     createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
-    deletedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
     accessedAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
-    expiredAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
+    expiredAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
     revokedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
     user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
   },
@@ -513,15 +465,12 @@ export type SessionOrderByWithAggregationInput = {
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   accessedAt?: Prisma.SortOrder;
-  expiredAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+  expiredAt?: Prisma.SortOrder;
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
   _count?: Prisma.SessionCountOrderByAggregateInput;
-  _avg?: Prisma.SessionAvgOrderByAggregateInput;
   _max?: Prisma.SessionMaxOrderByAggregateInput;
   _min?: Prisma.SessionMinOrderByAggregateInput;
-  _sum?: Prisma.SessionSumOrderByAggregateInput;
 };
 
 export type SessionScalarWhereWithAggregatesInput = {
@@ -547,12 +496,12 @@ export type SessionScalarWhereWithAggregatesInput = {
     | null;
   city?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null;
   latitude?:
-    | Prisma.FloatNullableWithAggregatesFilter<"Session">
-    | number
+    | Prisma.StringNullableWithAggregatesFilter<"Session">
+    | string
     | null;
   longitude?:
-    | Prisma.FloatNullableWithAggregatesFilter<"Session">
-    | number
+    | Prisma.StringNullableWithAggregatesFilter<"Session">
+    | string
     | null;
   userAgent?:
     | Prisma.StringNullableWithAggregatesFilter<"Session">
@@ -601,17 +550,8 @@ export type SessionScalarWhereWithAggregatesInput = {
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Session">;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string;
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string;
-  deletedAt?:
-    | Prisma.DateTimeNullableWithAggregatesFilter<"Session">
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string;
-  expiredAt?:
-    | Prisma.DateTimeNullableWithAggregatesFilter<"Session">
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string;
   revokedAt?:
     | Prisma.DateTimeNullableWithAggregatesFilter<"Session">
     | Date
@@ -627,8 +567,8 @@ export type SessionCreateInput = {
   region?: string | null;
   country?: string | null;
   city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude?: string | null;
+  longitude?: string | null;
   userAgent?: string | null;
   fingerprint?: string | null;
   deviceName?: string | null;
@@ -644,9 +584,8 @@ export type SessionCreateInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  deletedAt?: Date | string | null;
   accessedAt?: Date | string;
-  expiredAt?: Date | string | null;
+  expiredAt: Date | string;
   revokedAt?: Date | string | null;
   user: Prisma.UserCreateNestedOneWithoutSessionsInput;
 };
@@ -660,8 +599,8 @@ export type SessionUncheckedCreateInput = {
   region?: string | null;
   country?: string | null;
   city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude?: string | null;
+  longitude?: string | null;
   userAgent?: string | null;
   fingerprint?: string | null;
   deviceName?: string | null;
@@ -677,9 +616,8 @@ export type SessionUncheckedCreateInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  deletedAt?: Date | string | null;
   accessedAt?: Date | string;
-  expiredAt?: Date | string | null;
+  expiredAt: Date | string;
   revokedAt?: Date | string | null;
 };
 
@@ -691,8 +629,8 @@ export type SessionUpdateInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -716,17 +654,8 @@ export type SessionUpdateInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -744,8 +673,8 @@ export type SessionUncheckedUpdateInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -769,17 +698,8 @@ export type SessionUncheckedUpdateInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -796,8 +716,8 @@ export type SessionCreateManyInput = {
   region?: string | null;
   country?: string | null;
   city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude?: string | null;
+  longitude?: string | null;
   userAgent?: string | null;
   fingerprint?: string | null;
   deviceName?: string | null;
@@ -813,9 +733,8 @@ export type SessionCreateManyInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  deletedAt?: Date | string | null;
   accessedAt?: Date | string;
-  expiredAt?: Date | string | null;
+  expiredAt: Date | string;
   revokedAt?: Date | string | null;
 };
 
@@ -827,8 +746,8 @@ export type SessionUpdateManyMutationInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -852,17 +771,8 @@ export type SessionUpdateManyMutationInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -879,8 +789,8 @@ export type SessionUncheckedUpdateManyInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -904,17 +814,8 @@ export type SessionUncheckedUpdateManyInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -958,15 +859,9 @@ export type SessionCountOrderByAggregateInput = {
   metadata?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  deletedAt?: Prisma.SortOrder;
   accessedAt?: Prisma.SortOrder;
   expiredAt?: Prisma.SortOrder;
   revokedAt?: Prisma.SortOrder;
-};
-
-export type SessionAvgOrderByAggregateInput = {
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
 };
 
 export type SessionMaxOrderByAggregateInput = {
@@ -994,7 +889,6 @@ export type SessionMaxOrderByAggregateInput = {
   deviceType?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  deletedAt?: Prisma.SortOrder;
   accessedAt?: Prisma.SortOrder;
   expiredAt?: Prisma.SortOrder;
   revokedAt?: Prisma.SortOrder;
@@ -1025,15 +919,9 @@ export type SessionMinOrderByAggregateInput = {
   deviceType?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
-  deletedAt?: Prisma.SortOrder;
   accessedAt?: Prisma.SortOrder;
   expiredAt?: Prisma.SortOrder;
   revokedAt?: Prisma.SortOrder;
-};
-
-export type SessionSumOrderByAggregateInput = {
-  latitude?: Prisma.SortOrder;
-  longitude?: Prisma.SortOrder;
 };
 
 export type SessionCreateNestedManyWithoutUserInput = {
@@ -1130,14 +1018,6 @@ export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     | Prisma.SessionScalarWhereInput[];
 };
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null;
-  increment?: number;
-  decrement?: number;
-  multiply?: number;
-  divide?: number;
-};
-
 export type EnumDeviceTypeFieldUpdateOperationsInput = {
   set?: $Enums.DeviceType;
 };
@@ -1150,8 +1030,8 @@ export type SessionCreateWithoutUserInput = {
   region?: string | null;
   country?: string | null;
   city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude?: string | null;
+  longitude?: string | null;
   userAgent?: string | null;
   fingerprint?: string | null;
   deviceName?: string | null;
@@ -1167,9 +1047,8 @@ export type SessionCreateWithoutUserInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  deletedAt?: Date | string | null;
   accessedAt?: Date | string;
-  expiredAt?: Date | string | null;
+  expiredAt: Date | string;
   revokedAt?: Date | string | null;
 };
 
@@ -1181,8 +1060,8 @@ export type SessionUncheckedCreateWithoutUserInput = {
   region?: string | null;
   country?: string | null;
   city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude?: string | null;
+  longitude?: string | null;
   userAgent?: string | null;
   fingerprint?: string | null;
   deviceName?: string | null;
@@ -1198,9 +1077,8 @@ export type SessionUncheckedCreateWithoutUserInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  deletedAt?: Date | string | null;
   accessedAt?: Date | string;
-  expiredAt?: Date | string | null;
+  expiredAt: Date | string;
   revokedAt?: Date | string | null;
 };
 
@@ -1257,8 +1135,8 @@ export type SessionScalarWhereInput = {
   region?: Prisma.StringNullableFilter<"Session"> | string | null;
   country?: Prisma.StringNullableFilter<"Session"> | string | null;
   city?: Prisma.StringNullableFilter<"Session"> | string | null;
-  latitude?: Prisma.FloatNullableFilter<"Session"> | number | null;
-  longitude?: Prisma.FloatNullableFilter<"Session"> | number | null;
+  latitude?: Prisma.StringNullableFilter<"Session"> | string | null;
+  longitude?: Prisma.StringNullableFilter<"Session"> | string | null;
   userAgent?: Prisma.StringNullableFilter<"Session"> | string | null;
   fingerprint?: Prisma.StringNullableFilter<"Session"> | string | null;
   deviceName?: Prisma.StringNullableFilter<"Session"> | string | null;
@@ -1274,9 +1152,8 @@ export type SessionScalarWhereInput = {
   metadata?: Prisma.JsonNullableFilter<"Session">;
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
   updatedAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
-  deletedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
   accessedAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
-  expiredAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
+  expiredAt?: Prisma.DateTimeFilter<"Session"> | Date | string;
   revokedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null;
 };
 
@@ -1288,8 +1165,8 @@ export type SessionCreateManyUserInput = {
   region?: string | null;
   country?: string | null;
   city?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
+  latitude?: string | null;
+  longitude?: string | null;
   userAgent?: string | null;
   fingerprint?: string | null;
   deviceName?: string | null;
@@ -1305,9 +1182,8 @@ export type SessionCreateManyUserInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  deletedAt?: Date | string | null;
   accessedAt?: Date | string;
-  expiredAt?: Date | string | null;
+  expiredAt: Date | string;
   revokedAt?: Date | string | null;
 };
 
@@ -1319,8 +1195,8 @@ export type SessionUpdateWithoutUserInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1344,17 +1220,8 @@ export type SessionUpdateWithoutUserInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1370,8 +1237,8 @@ export type SessionUncheckedUpdateWithoutUserInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1395,17 +1262,8 @@ export type SessionUncheckedUpdateWithoutUserInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1421,8 +1279,8 @@ export type SessionUncheckedUpdateManyWithoutUserInput = {
   region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
-  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null;
+  latitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+  longitude?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   fingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
   deviceName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1446,17 +1304,8 @@ export type SessionUncheckedUpdateManyWithoutUserInput = {
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  deletedAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
   accessedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-  expiredAt?:
-    | Prisma.NullableDateTimeFieldUpdateOperationsInput
-    | Date
-    | string
-    | null;
+  expiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
   revokedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1494,7 +1343,6 @@ export type SessionSelect<
     metadata?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    deletedAt?: boolean;
     accessedAt?: boolean;
     expiredAt?: boolean;
     revokedAt?: boolean;
@@ -1533,7 +1381,6 @@ export type SessionSelectCreateManyAndReturn<
     metadata?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    deletedAt?: boolean;
     accessedAt?: boolean;
     expiredAt?: boolean;
     revokedAt?: boolean;
@@ -1572,7 +1419,6 @@ export type SessionSelectUpdateManyAndReturn<
     metadata?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
-    deletedAt?: boolean;
     accessedAt?: boolean;
     expiredAt?: boolean;
     revokedAt?: boolean;
@@ -1607,7 +1453,6 @@ export type SessionSelectScalar = {
   metadata?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
-  deletedAt?: boolean;
   accessedAt?: boolean;
   expiredAt?: boolean;
   revokedAt?: boolean;
@@ -1642,7 +1487,6 @@ export type SessionOmit<
   | "metadata"
   | "createdAt"
   | "updatedAt"
-  | "deletedAt"
   | "accessedAt"
   | "expiredAt"
   | "revokedAt",
@@ -1685,8 +1529,8 @@ export type $SessionPayload<
       region: string | null;
       country: string | null;
       city: string | null;
-      latitude: number | null;
-      longitude: number | null;
+      latitude: string | null;
+      longitude: string | null;
       userAgent: string | null;
       fingerprint: string | null;
       deviceName: string | null;
@@ -1702,9 +1546,8 @@ export type $SessionPayload<
       metadata: runtime.JsonValue | null;
       createdAt: Date;
       updatedAt: Date;
-      deletedAt: Date | null;
       accessedAt: Date;
-      expiredAt: Date | null;
+      expiredAt: Date;
       revokedAt: Date | null;
     },
     ExtArgs["result"]["session"]
@@ -2320,8 +2163,8 @@ export interface SessionFieldRefs {
   readonly region: Prisma.FieldRef<"Session", "String">;
   readonly country: Prisma.FieldRef<"Session", "String">;
   readonly city: Prisma.FieldRef<"Session", "String">;
-  readonly latitude: Prisma.FieldRef<"Session", "Float">;
-  readonly longitude: Prisma.FieldRef<"Session", "Float">;
+  readonly latitude: Prisma.FieldRef<"Session", "String">;
+  readonly longitude: Prisma.FieldRef<"Session", "String">;
   readonly userAgent: Prisma.FieldRef<"Session", "String">;
   readonly fingerprint: Prisma.FieldRef<"Session", "String">;
   readonly deviceName: Prisma.FieldRef<"Session", "String">;
@@ -2337,7 +2180,6 @@ export interface SessionFieldRefs {
   readonly metadata: Prisma.FieldRef<"Session", "Json">;
   readonly createdAt: Prisma.FieldRef<"Session", "DateTime">;
   readonly updatedAt: Prisma.FieldRef<"Session", "DateTime">;
-  readonly deletedAt: Prisma.FieldRef<"Session", "DateTime">;
   readonly accessedAt: Prisma.FieldRef<"Session", "DateTime">;
   readonly expiredAt: Prisma.FieldRef<"Session", "DateTime">;
   readonly revokedAt: Prisma.FieldRef<"Session", "DateTime">;

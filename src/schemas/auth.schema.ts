@@ -86,6 +86,18 @@ export const loginSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginSchema>["body"];
 
+export const twoFactorSchema = z.object({
+  body: z.object({
+    twoFactorToken: z.string().min(1, "Two-factor token is required"),
+    code: z
+      .string()
+      .length(6, "Code must be exactly 6 digits")
+      .regex(/^\d{6}$/, "Code must be numeric"),
+  }),
+});
+
+export type TwoFactorInput = z.infer<typeof twoFactorSchema>["body"];
+
 export const forgotPasswordSchema = z.object({
   body: z.object({
     email: z.email("Invalid email address"),

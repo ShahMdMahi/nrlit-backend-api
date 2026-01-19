@@ -112,22 +112,19 @@ model User {
   auditLogs   AuditLog[]
 
   // Fields
-  firstName          String
-  lastName           String
-  email              String    @unique
-  username           String    @unique
-  phone              String    @unique
-  password           String
-  avatar             String?
-  dateOfBirth        DateTime?
-  verificationToken  String?
-  resetPasswordToken String?
-
-  // Security
-  failedLoginAttempts  Int      @default(0)
-  twoFactorEnabled     Boolean  @default(false)
-  twoFactorSecret      String?
-  twoFactorBackupCodes String[]
+  firstName           String
+  lastName            String
+  email               String    @unique
+  username            String    @unique
+  phone               String    @unique
+  password            String
+  avatar              String?
+  dateOfBirth         DateTime?
+  verificationToken   String?   @unique
+  resetPasswordToken  String?   @unique
+  failedLoginAttempts Int       @default(0)
+  twoFactorCode       String?
+  twoFactorToken      String?
 
   // Enums
   role Role @default(NORMAL_USER)
@@ -146,6 +143,8 @@ model User {
   lockedUntil                 DateTime?
   lastLoginAt                 DateTime?
   lastFailedLoginAt           DateTime?
+  twoFactorEnabledAt          DateTime?
+  twoFactorCodeExpiresAt      DateTime?
   verificationTokenExpiredAt  DateTime?
   resetPasswordTokenExpiredAt DateTime?
 
@@ -180,8 +179,8 @@ model Session {
   region         String?
   country        String?
   city           String?
-  latitude       Float?
-  longitude      Float?
+  latitude       String?
+  longitude      String?
   userAgent      String?
   fingerprint    String?
   deviceName     String?
@@ -203,14 +202,15 @@ model Session {
   // Timestamps
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  deletedAt  DateTime?
   accessedAt DateTime  @default(now())
-  expiredAt  DateTime?
+  expiredAt  DateTime
   revokedAt  DateTime?
 
   // Constraints and Indexes
-  @@index([id, deletedAt])
-  @@index([userId, deletedAt])
+  @@index([id])
+  @@index([userId])
+  @@index([token])
+  @@index([accessedAt])
 }
 
 model BlogProfile {
@@ -334,30 +334,12 @@ model AuditLog {
   // Child Relations
 
   // Fields
-  entity         AuditEntity
-  action         AuditAction
-  description    String?
-  ipAddress      String?
-  isp            String?
-  region         String?
-  country        String?
-  city           String?
-  latitude       Float?
-  longitude      Float?
-  userAgent      String?
-  fingerprint    String?
-  deviceName     String?
-  deviceBrand    String?
-  deviceModel    String?
-  osName         String?
-  osVersion      String?
-  browserName    String?
-  browserVersion String?
-  browserEngine  String?
-  cpuArch        String?
-
-  // Enums
-  deviceType DeviceType @default(UNKNOWN)
+  entity      AuditEntity
+  action      AuditAction
+  description String?
+  ipAddress   String?
+  userAgent   String?
+  fingerprint String?
 
   // Metadata
   metadata Json? @db.JsonB
