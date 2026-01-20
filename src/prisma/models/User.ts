@@ -44,11 +44,12 @@ export type UserMinAggregateOutputType = {
   password: string | null;
   avatar: string | null;
   dateOfBirth: Date | null;
+  verificationCode: string | null;
   verificationToken: string | null;
   resetPasswordToken: string | null;
-  failedLoginAttempts: number | null;
   twoFactorCode: string | null;
   twoFactorToken: string | null;
+  failedLoginAttempts: number | null;
   role: $Enums.Role | null;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -76,11 +77,12 @@ export type UserMaxAggregateOutputType = {
   password: string | null;
   avatar: string | null;
   dateOfBirth: Date | null;
+  verificationCode: string | null;
   verificationToken: string | null;
   resetPasswordToken: string | null;
-  failedLoginAttempts: number | null;
   twoFactorCode: string | null;
   twoFactorToken: string | null;
+  failedLoginAttempts: number | null;
   role: $Enums.Role | null;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -108,11 +110,12 @@ export type UserCountAggregateOutputType = {
   password: number;
   avatar: number;
   dateOfBirth: number;
+  verificationCode: number;
   verificationToken: number;
   resetPasswordToken: number;
-  failedLoginAttempts: number;
   twoFactorCode: number;
   twoFactorToken: number;
+  failedLoginAttempts: number;
   role: number;
   metadata: number;
   createdAt: number;
@@ -150,11 +153,12 @@ export type UserMinAggregateInputType = {
   password?: true;
   avatar?: true;
   dateOfBirth?: true;
+  verificationCode?: true;
   verificationToken?: true;
   resetPasswordToken?: true;
-  failedLoginAttempts?: true;
   twoFactorCode?: true;
   twoFactorToken?: true;
+  failedLoginAttempts?: true;
   role?: true;
   createdAt?: true;
   updatedAt?: true;
@@ -182,11 +186,12 @@ export type UserMaxAggregateInputType = {
   password?: true;
   avatar?: true;
   dateOfBirth?: true;
+  verificationCode?: true;
   verificationToken?: true;
   resetPasswordToken?: true;
-  failedLoginAttempts?: true;
   twoFactorCode?: true;
   twoFactorToken?: true;
+  failedLoginAttempts?: true;
   role?: true;
   createdAt?: true;
   updatedAt?: true;
@@ -214,11 +219,12 @@ export type UserCountAggregateInputType = {
   password?: true;
   avatar?: true;
   dateOfBirth?: true;
+  verificationCode?: true;
   verificationToken?: true;
   resetPasswordToken?: true;
-  failedLoginAttempts?: true;
   twoFactorCode?: true;
   twoFactorToken?: true;
+  failedLoginAttempts?: true;
   role?: true;
   metadata?: true;
   createdAt?: true;
@@ -341,11 +347,12 @@ export type UserGroupByOutputType = {
   password: string;
   avatar: string | null;
   dateOfBirth: Date | null;
+  verificationCode: string | null;
   verificationToken: string | null;
   resetPasswordToken: string | null;
-  failedLoginAttempts: number;
   twoFactorCode: string | null;
   twoFactorToken: string | null;
+  failedLoginAttempts: number;
   role: $Enums.Role;
   metadata: runtime.JsonValue | null;
   createdAt: Date;
@@ -394,11 +401,12 @@ export type UserWhereInput = {
   password?: Prisma.StringFilter<"User"> | string;
   avatar?: Prisma.StringNullableFilter<"User"> | string | null;
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
+  verificationCode?: Prisma.StringNullableFilter<"User"> | string | null;
   verificationToken?: Prisma.StringNullableFilter<"User"> | string | null;
   resetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null;
-  failedLoginAttempts?: Prisma.IntFilter<"User"> | number;
   twoFactorCode?: Prisma.StringNullableFilter<"User"> | string | null;
   twoFactorToken?: Prisma.StringNullableFilter<"User"> | string | null;
+  failedLoginAttempts?: Prisma.IntFilter<"User"> | number;
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role;
   metadata?: Prisma.JsonNullableFilter<"User">;
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -453,11 +461,12 @@ export type UserOrderByWithRelationInput = {
   password?: Prisma.SortOrder;
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder;
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder;
+  verificationCode?: Prisma.SortOrderInput | Prisma.SortOrder;
   verificationToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder;
-  failedLoginAttempts?: Prisma.SortOrder;
   twoFactorCode?: Prisma.SortOrderInput | Prisma.SortOrder;
   twoFactorToken?: Prisma.SortOrderInput | Prisma.SortOrder;
+  failedLoginAttempts?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -487,6 +496,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     phone?: string;
     verificationToken?: string;
     resetPasswordToken?: string;
+    twoFactorToken?: string;
     username_email_phone?: Prisma.UserUsernameEmailPhoneCompoundUniqueInput;
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
@@ -496,9 +506,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     password?: Prisma.StringFilter<"User"> | string;
     avatar?: Prisma.StringNullableFilter<"User"> | string | null;
     dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
-    failedLoginAttempts?: Prisma.IntFilter<"User"> | number;
+    verificationCode?: Prisma.StringNullableFilter<"User"> | string | null;
     twoFactorCode?: Prisma.StringNullableFilter<"User"> | string | null;
-    twoFactorToken?: Prisma.StringNullableFilter<"User"> | string | null;
+    failedLoginAttempts?: Prisma.IntFilter<"User"> | number;
     role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role;
     metadata?: Prisma.JsonNullableFilter<"User">;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -548,6 +558,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
   | "phone"
   | "verificationToken"
   | "resetPasswordToken"
+  | "twoFactorToken"
   | "username_email_phone"
 >;
 
@@ -561,11 +572,12 @@ export type UserOrderByWithAggregationInput = {
   password?: Prisma.SortOrder;
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder;
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder;
+  verificationCode?: Prisma.SortOrderInput | Prisma.SortOrder;
   verificationToken?: Prisma.SortOrderInput | Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder;
-  failedLoginAttempts?: Prisma.SortOrder;
   twoFactorCode?: Prisma.SortOrderInput | Prisma.SortOrder;
   twoFactorToken?: Prisma.SortOrderInput | Prisma.SortOrder;
+  failedLoginAttempts?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -610,6 +622,10 @@ export type UserScalarWhereWithAggregatesInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.StringNullableWithAggregatesFilter<"User">
+    | string
+    | null;
   verificationToken?:
     | Prisma.StringNullableWithAggregatesFilter<"User">
     | string
@@ -618,7 +634,6 @@ export type UserScalarWhereWithAggregatesInput = {
     | Prisma.StringNullableWithAggregatesFilter<"User">
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number;
   twoFactorCode?:
     | Prisma.StringNullableWithAggregatesFilter<"User">
     | string
@@ -627,6 +642,7 @@ export type UserScalarWhereWithAggregatesInput = {
     | Prisma.StringNullableWithAggregatesFilter<"User">
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number;
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role;
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"User">;
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
@@ -703,11 +719,12 @@ export type UserCreateInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -739,11 +756,12 @@ export type UserUncheckedCreateInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -779,6 +797,10 @@ export type UserUpdateInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -787,7 +809,6 @@ export type UserUpdateInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -796,6 +817,7 @@ export type UserUpdateInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -879,6 +901,10 @@ export type UserUncheckedUpdateInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -887,7 +913,6 @@ export type UserUncheckedUpdateInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -896,6 +921,7 @@ export type UserUncheckedUpdateInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -975,11 +1001,12 @@ export type UserCreateManyInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1012,6 +1039,10 @@ export type UserUpdateManyMutationInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1020,7 +1051,6 @@ export type UserUpdateManyMutationInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1029,6 +1059,7 @@ export type UserUpdateManyMutationInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1109,6 +1140,10 @@ export type UserUncheckedUpdateManyInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1117,7 +1152,6 @@ export type UserUncheckedUpdateManyInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1126,6 +1160,7 @@ export type UserUncheckedUpdateManyInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1208,11 +1243,12 @@ export type UserCountOrderByAggregateInput = {
   password?: Prisma.SortOrder;
   avatar?: Prisma.SortOrder;
   dateOfBirth?: Prisma.SortOrder;
+  verificationCode?: Prisma.SortOrder;
   verificationToken?: Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrder;
-  failedLoginAttempts?: Prisma.SortOrder;
   twoFactorCode?: Prisma.SortOrder;
   twoFactorToken?: Prisma.SortOrder;
+  failedLoginAttempts?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   metadata?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
@@ -1245,11 +1281,12 @@ export type UserMaxOrderByAggregateInput = {
   password?: Prisma.SortOrder;
   avatar?: Prisma.SortOrder;
   dateOfBirth?: Prisma.SortOrder;
+  verificationCode?: Prisma.SortOrder;
   verificationToken?: Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrder;
-  failedLoginAttempts?: Prisma.SortOrder;
   twoFactorCode?: Prisma.SortOrder;
   twoFactorToken?: Prisma.SortOrder;
+  failedLoginAttempts?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
@@ -1277,11 +1314,12 @@ export type UserMinOrderByAggregateInput = {
   password?: Prisma.SortOrder;
   avatar?: Prisma.SortOrder;
   dateOfBirth?: Prisma.SortOrder;
+  verificationCode?: Prisma.SortOrder;
   verificationToken?: Prisma.SortOrder;
   resetPasswordToken?: Prisma.SortOrder;
-  failedLoginAttempts?: Prisma.SortOrder;
   twoFactorCode?: Prisma.SortOrder;
   twoFactorToken?: Prisma.SortOrder;
+  failedLoginAttempts?: Prisma.SortOrder;
   role?: Prisma.SortOrder;
   createdAt?: Prisma.SortOrder;
   updatedAt?: Prisma.SortOrder;
@@ -1431,11 +1469,12 @@ export type UserCreateWithoutSessionsInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1466,11 +1505,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1533,6 +1573,10 @@ export type UserUpdateWithoutSessionsInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1541,7 +1585,6 @@ export type UserUpdateWithoutSessionsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1550,6 +1593,7 @@ export type UserUpdateWithoutSessionsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1632,6 +1676,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1640,7 +1688,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1649,6 +1696,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1727,11 +1775,12 @@ export type UserCreateWithoutBlogProfileInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1762,11 +1811,12 @@ export type UserUncheckedCreateWithoutBlogProfileInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -1829,6 +1879,10 @@ export type UserUpdateWithoutBlogProfileInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1837,7 +1891,6 @@ export type UserUpdateWithoutBlogProfileInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1846,6 +1899,7 @@ export type UserUpdateWithoutBlogProfileInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1928,6 +1982,10 @@ export type UserUncheckedUpdateWithoutBlogProfileInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1936,7 +1994,6 @@ export type UserUncheckedUpdateWithoutBlogProfileInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -1945,6 +2002,7 @@ export type UserUncheckedUpdateWithoutBlogProfileInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2023,11 +2081,12 @@ export type UserCreateWithoutAuditLogsInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -2058,11 +2117,12 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   password: string;
   avatar?: string | null;
   dateOfBirth?: Date | string | null;
+  verificationCode?: string | null;
   verificationToken?: string | null;
   resetPasswordToken?: string | null;
-  failedLoginAttempts?: number;
   twoFactorCode?: string | null;
   twoFactorToken?: string | null;
+  failedLoginAttempts?: number;
   role?: $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Date | string;
@@ -2125,6 +2185,10 @@ export type UserUpdateWithoutAuditLogsInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -2133,7 +2197,6 @@ export type UserUpdateWithoutAuditLogsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -2142,6 +2205,7 @@ export type UserUpdateWithoutAuditLogsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2224,6 +2288,10 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     | Date
     | string
     | null;
+  verificationCode?:
+    | Prisma.NullableStringFieldUpdateOperationsInput
+    | string
+    | null;
   verificationToken?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -2232,7 +2300,6 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
-  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   twoFactorCode?:
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
@@ -2241,6 +2308,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
     | Prisma.NullableStringFieldUpdateOperationsInput
     | string
     | null;
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role;
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2373,11 +2441,12 @@ export type UserSelect<
     password?: boolean;
     avatar?: boolean;
     dateOfBirth?: boolean;
+    verificationCode?: boolean;
     verificationToken?: boolean;
     resetPasswordToken?: boolean;
-    failedLoginAttempts?: boolean;
     twoFactorCode?: boolean;
     twoFactorToken?: boolean;
+    failedLoginAttempts?: boolean;
     role?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -2416,11 +2485,12 @@ export type UserSelectCreateManyAndReturn<
     password?: boolean;
     avatar?: boolean;
     dateOfBirth?: boolean;
+    verificationCode?: boolean;
     verificationToken?: boolean;
     resetPasswordToken?: boolean;
-    failedLoginAttempts?: boolean;
     twoFactorCode?: boolean;
     twoFactorToken?: boolean;
+    failedLoginAttempts?: boolean;
     role?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -2455,11 +2525,12 @@ export type UserSelectUpdateManyAndReturn<
     password?: boolean;
     avatar?: boolean;
     dateOfBirth?: boolean;
+    verificationCode?: boolean;
     verificationToken?: boolean;
     resetPasswordToken?: boolean;
-    failedLoginAttempts?: boolean;
     twoFactorCode?: boolean;
     twoFactorToken?: boolean;
+    failedLoginAttempts?: boolean;
     role?: boolean;
     metadata?: boolean;
     createdAt?: boolean;
@@ -2490,11 +2561,12 @@ export type UserSelectScalar = {
   password?: boolean;
   avatar?: boolean;
   dateOfBirth?: boolean;
+  verificationCode?: boolean;
   verificationToken?: boolean;
   resetPasswordToken?: boolean;
-  failedLoginAttempts?: boolean;
   twoFactorCode?: boolean;
   twoFactorToken?: boolean;
+  failedLoginAttempts?: boolean;
   role?: boolean;
   metadata?: boolean;
   createdAt?: boolean;
@@ -2526,11 +2598,12 @@ export type UserOmit<
   | "password"
   | "avatar"
   | "dateOfBirth"
+  | "verificationCode"
   | "verificationToken"
   | "resetPasswordToken"
-  | "failedLoginAttempts"
   | "twoFactorCode"
   | "twoFactorToken"
+  | "failedLoginAttempts"
   | "role"
   | "metadata"
   | "createdAt"
@@ -2588,11 +2661,12 @@ export type $UserPayload<
       password: string;
       avatar: string | null;
       dateOfBirth: Date | null;
+      verificationCode: string | null;
       verificationToken: string | null;
       resetPasswordToken: string | null;
-      failedLoginAttempts: number;
       twoFactorCode: string | null;
       twoFactorToken: string | null;
+      failedLoginAttempts: number;
       role: $Enums.Role;
       metadata: runtime.JsonValue | null;
       createdAt: Date;
@@ -3245,11 +3319,12 @@ export interface UserFieldRefs {
   readonly password: Prisma.FieldRef<"User", "String">;
   readonly avatar: Prisma.FieldRef<"User", "String">;
   readonly dateOfBirth: Prisma.FieldRef<"User", "DateTime">;
+  readonly verificationCode: Prisma.FieldRef<"User", "String">;
   readonly verificationToken: Prisma.FieldRef<"User", "String">;
   readonly resetPasswordToken: Prisma.FieldRef<"User", "String">;
-  readonly failedLoginAttempts: Prisma.FieldRef<"User", "Int">;
   readonly twoFactorCode: Prisma.FieldRef<"User", "String">;
   readonly twoFactorToken: Prisma.FieldRef<"User", "String">;
+  readonly failedLoginAttempts: Prisma.FieldRef<"User", "Int">;
   readonly role: Prisma.FieldRef<"User", "Role">;
   readonly metadata: Prisma.FieldRef<"User", "Json">;
   readonly createdAt: Prisma.FieldRef<"User", "DateTime">;

@@ -1,5 +1,6 @@
 import * as argon2 from "argon2";
 import crypto from "node:crypto";
+import { z } from "zod";
 import { prisma } from "../libs/db.js";
 import {
   LoginInput,
@@ -23,20 +24,80 @@ class AuthService {
     const validate = await registerSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
-      throw new HttpError("Invalid user data", 400, validate.error);
+      throw new HttpError("Invalid user data", 400, validate.error.issues);
     }
 
-    if (data.password !== data.confirmPassword) {
-      throw new HttpError("Passwords do not match", 400);
+    const checkUserName = await prisma.user.findUnique({
+      where: { username: validate.data.body.username },
+      select: { id: true, username: true },
+    });
+
+    if (checkUserName) {
+      throw new HttpError(
+        "Username already taken",
+        409,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "username"],
+            message: "Username already taken",
+          },
+        ]).issues
+      );
+    }
+
+    const checkEmail = await prisma.user.findUnique({
+      where: { email: validate.data.body.email },
+      select: { id: true, email: true },
+    });
+
+    if (checkEmail) {
+      throw new HttpError(
+        "Email already registered",
+        409,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "Email already registered",
+          },
+        ]).issues
+      );
+    }
+
+    const checkPhone = await prisma.user.findUnique({
+      where: { phone: validate.data.body.phone },
+      select: { id: true, phone: true },
+    });
+
+    if (checkPhone) {
+      throw new HttpError(
+        "Phone number already registered",
+        409,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "phone"],
+            message: "Phone number already registered",
+          },
+        ]).issues
+      );
     }
 
     const userExists = await prisma.user.findFirst({
       where: {
         OR: [
-          { username: data.username },
-          { email: data.email },
-          { phone: data.phone },
+          { username: validate.data.body.username },
+          { email: validate.data.body.email },
+          { phone: validate.data.body.phone },
         ],
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        phone: true,
+        deletedAt: true,
       },
     });
 
@@ -48,7 +109,7 @@ class AuthService {
       throw new HttpError("User previously deleted. Contact support.", 410);
     }
 
-    const hashedPassword = await argon2.hash(data.password, {
+    const hashedPassword = await argon2.hash(validate.data.body.password, {
       type: argon2.argon2id,
       memoryCost: 65536,
       timeCost: 3,
@@ -59,17 +120,21 @@ class AuthService {
       throw new HttpError("Failed to hash password", 500);
     }
 
-    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const verificationToken = crypto.randomBytes(64).toString("hex");
+    const randomInt = crypto.randomInt(0, 4294967296);
+    const code = randomInt % 1000000;
+    const verificationCode = code.toString().padStart(6, "0");
 
     const newUser = await prisma.user.create({
       data: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        username: data.username,
-        email: data.email,
-        phone: data.phone,
+        firstName: validate.data.body.firstName,
+        lastName: validate.data.body.lastName,
+        username: validate.data.body.username,
+        email: validate.data.body.email,
+        phone: validate.data.body.phone,
         password: hashedPassword,
         verificationToken: verificationToken,
+        verificationCode: verificationCode,
         verificationTokenExpiredAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
       select: {
@@ -80,6 +145,7 @@ class AuthService {
         email: true,
         phone: true,
         verificationToken: true,
+        verificationCode: true,
         verificationTokenExpiredAt: true,
         createdAt: true,
       },
@@ -102,10 +168,15 @@ class AuthService {
           username: newUser.username,
           email: newUser.email,
           phone: newUser.phone,
+          verificationCode: newUser.verificationCode,
           verificationUrl: `${env.FRONTEND_BASE_URL}/auth/verify?token=${newUser.verificationToken}`,
           verificationTokenExpiredAt:
-            newUser.verificationTokenExpiredAt?.toLocaleString(),
-          createdAt: newUser.createdAt.toLocaleString(),
+            newUser.verificationTokenExpiredAt?.toLocaleString("en-US", {
+              timeZone: "Asia/Dhaka",
+            }),
+          createdAt: newUser.createdAt.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
         },
       } as never)
       .catch((error) => {
@@ -122,7 +193,7 @@ class AuthService {
       logger.error("Failed to log audit event for user registration:", { err });
     });
 
-    return newUser;
+    return { email: newUser.email, token: newUser.verificationToken };
   }
 
   public async resendVerification(data: ResendVerificationInput) {
@@ -131,12 +202,13 @@ class AuthService {
     });
 
     if (!validate.success) {
-      throw new HttpError("Invalid data", 400, validate.error);
+      throw new HttpError("Invalid data", 400, validate.error.issues);
     }
 
     const userExists = await prisma.user.findFirst({
       where: {
-        email: data.email,
+        email: validate.data.body.email,
+        bannedAt: null,
         deletedAt: null,
       },
       select: {
@@ -148,29 +220,68 @@ class AuthService {
     });
 
     if (!userExists) {
-      throw new HttpError("User does not exist", 404);
+      throw new HttpError(
+        "User does not exist",
+        404,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "User does not exist",
+          },
+        ]).issues
+      );
     }
 
     if (userExists.verifiedAt) {
-      throw new HttpError("Email is already verified", 400);
+      throw new HttpError(
+        "Email is already verified",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "Email is already verified",
+          },
+        ]).issues
+      );
     }
 
-    const verficationToken = crypto.randomBytes(32).toString("hex");
+    const verificationToken = crypto.randomBytes(64).toString("hex");
+    const randomInt = crypto.randomInt(0, 4294967296);
+    const code = randomInt % 1000000;
+    const verificationCode = code.toString().padStart(6, "0");
 
     const updatedUser = await prisma.user.update({
       where: { id: userExists.id },
       data: {
-        verificationToken: verficationToken,
+        verificationToken: verificationToken,
+        verificationCode: verificationCode,
         verificationTokenExpiredAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
       select: {
         id: true,
         email: true,
+        verificationCode: true,
         verificationToken: true,
         verificationTokenExpiredAt: true,
         updatedAt: true,
       },
     });
+
+    if (!updatedUser) {
+      throw new HttpError(
+        "Failed to update user verification info",
+        500,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "Failed to update user verification info",
+          },
+        ]).issues
+      );
+    }
 
     await transporter
       .sendMail({
@@ -181,10 +292,15 @@ class AuthService {
         context: {
           id: updatedUser.id,
           email: updatedUser.email,
+          verificationCode: updatedUser.verificationCode,
           verificationUrl: `${env.FRONTEND_BASE_URL}/auth/verify?token=${updatedUser.verificationToken}`,
           verificationTokenExpiredAt:
-            updatedUser.verificationTokenExpiredAt?.toLocaleString(),
-          updatedAt: updatedUser.updatedAt.toLocaleString(),
+            updatedUser.verificationTokenExpiredAt?.toLocaleString("en-US", {
+              timeZone: "Asia/Dhaka",
+            }),
+          updatedAt: updatedUser.updatedAt.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
         },
       } as never)
       .catch((error) => {
@@ -203,22 +319,23 @@ class AuthService {
       });
     });
 
-    return updatedUser;
+    return { email: updatedUser.email, token: updatedUser.verificationToken };
   }
 
   public async verifyEmail(data: VerifyEmailInput) {
     const validate = await verifyEmailSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
-      throw new HttpError("Invalid data", 400, validate.error);
+      throw new HttpError("Invalid data", 400, validate.error.issues);
     }
 
     const userExists = await prisma.user.findFirst({
       where: {
-        verificationToken: data.token,
+        verificationToken: validate.data.body.token,
         verificationTokenExpiredAt: {
           gt: new Date(),
         },
+        bannedAt: null,
         deletedAt: null,
       },
       select: {
@@ -226,29 +343,94 @@ class AuthService {
         email: true,
         verificationToken: true,
         verifiedAt: true,
+        verificationCode: true,
         verificationTokenExpiredAt: true,
         deletedAt: true,
       },
     });
 
     if (!userExists) {
-      throw new HttpError("Invalid or expired verification token", 400);
+      throw new HttpError(
+        "Invalid or expired verification token",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Invalid or expired verification token",
+          },
+        ]).issues
+      );
     }
 
     if (userExists.verifiedAt) {
-      throw new HttpError("Email is already verified", 400);
+      throw new HttpError(
+        "Email is already verified",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Email is already verified",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.verificationTokenExpiredAt! < new Date()) {
+      throw new HttpError(
+        "Verification token has expired",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Verification token has expired",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.verificationToken !== validate.data.body.token) {
+      throw new HttpError(
+        "Invalid verification token",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Invalid verification token",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.verificationCode !== validate.data.body.code) {
+      throw new HttpError(
+        "Invalid verification code",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "code"],
+            message: "Invalid verification code",
+          },
+        ]).issues
+      );
     }
 
     const verifiedUser = await prisma.user.update({
       where: { id: userExists.id },
       data: {
         verifiedAt: new Date(),
+        verificationCode: null,
         verificationToken: null,
         verificationTokenExpiredAt: null,
       },
       select: {
         id: true,
         email: true,
+        verificationCode: true,
         verificationToken: true,
         verifiedAt: true,
         verificationTokenExpiredAt: true,
@@ -256,7 +438,17 @@ class AuthService {
     });
 
     if (!verifiedUser) {
-      throw new HttpError("Failed to verify email", 500);
+      throw new HttpError(
+        "Failed to verify email",
+        500,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Failed to verify email",
+          },
+        ]).issues
+      );
     }
 
     transporter
@@ -268,7 +460,9 @@ class AuthService {
         context: {
           id: verifiedUser.id,
           email: verifiedUser.email,
-          verifiedAt: verifiedUser.verifiedAt?.toLocaleString(),
+          verifiedAt: verifiedUser.verifiedAt?.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
         },
       } as never)
       .catch((error) => {
@@ -289,23 +483,24 @@ class AuthService {
       });
     });
 
-    return verifiedUser;
+    return { email: verifiedUser.email };
   }
 
   public async login(data: LoginInput) {
     const validate = await loginSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
-      throw new HttpError("Invalid data", 400, validate.error);
+      throw new HttpError("Invalid data", 400, validate.error.issues);
     }
 
     const userExists = await prisma.user.findFirst({
       where: {
         OR: [
-          { email: data.identifier },
-          { username: data.identifier },
-          { phone: data.identifier },
+          { email: validate.data.body.identifier },
+          { username: validate.data.body.identifier },
+          { phone: validate.data.body.identifier },
         ],
+        bannedAt: null,
         deletedAt: null,
       },
       select: {
@@ -320,16 +515,97 @@ class AuthService {
         suspendedAt: true,
         bannedAt: true,
         twoFactorEnabledAt: true,
+        failedLoginAttempts: true,
       },
     });
 
     if (!userExists) {
-      throw new HttpError("Invalid credentials", 401);
+      throw new HttpError(
+        "Invalid credentials",
+        401,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "identifier"],
+            message: "Invalid credentials",
+          },
+        ]).issues
+      );
+    }
+
+    if (!userExists.verifiedAt) {
+      throw new HttpError(
+        "Email is not verified",
+        403,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "identifier"],
+            message: "Email is not verified",
+          },
+        ]).issues
+      );
+    }
+
+    if (!userExists.approvedAt) {
+      throw new HttpError(
+        "User is not approved",
+        403,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "identifier"],
+            message: "User is not approved",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.lockedUntil && userExists.lockedUntil > new Date()) {
+      throw new HttpError(
+        "User is locked until " +
+          userExists.lockedUntil.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
+        403,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "identifier"],
+            message:
+              "User is locked until " +
+              userExists.lockedUntil.toLocaleString("en-US", {
+                timeZone: "Asia/Dhaka",
+              }),
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.suspendedAt) {
+      throw new HttpError(
+        "User is suspended at " +
+          userExists.suspendedAt.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
+        403,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "identifier"],
+            message:
+              "User is suspended at " +
+              userExists.suspendedAt.toLocaleString("en-US", {
+                timeZone: "Asia/Dhaka",
+              }),
+          },
+        ]).issues
+      );
     }
 
     const passwordMatch = await argon2.verify(
       userExists.password,
-      data.password
+      validate.data.body.password
     );
 
     if (!passwordMatch) {
@@ -339,6 +615,10 @@ class AuthService {
           failedLoginAttempts: {
             increment: 1,
           },
+          lockedUntil:
+            userExists.failedLoginAttempts + 1 >= 5
+              ? new Date(Date.now() + 30 * 60 * 1000)
+              : null,
           lastFailedLoginAt: new Date(),
         },
         select: {
@@ -360,27 +640,17 @@ class AuthService {
         });
       });
 
-      throw new HttpError("Invalid credentials", 401);
-    }
-
-    if (!userExists.verifiedAt) {
-      throw new HttpError("Email is not verified", 403);
-    }
-
-    if (!userExists.approvedAt) {
-      throw new HttpError("User is not approved", 403);
-    }
-
-    if (userExists.lockedUntil && userExists.lockedUntil > new Date()) {
-      throw new HttpError("User is locked", 403);
-    }
-
-    if (userExists.suspendedAt) {
-      throw new HttpError("User is suspended", 403);
-    }
-
-    if (userExists.bannedAt) {
-      throw new HttpError("User is banned", 403);
+      throw new HttpError(
+        "Invalid credentials",
+        401,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "identifier"],
+            message: "Invalid credentials",
+          },
+        ]).issues
+      );
     }
 
     if (userExists.twoFactorEnabledAt) {
@@ -414,8 +684,15 @@ class AuthService {
           context: {
             code: updatedUser.twoFactorCode,
             email: updatedUser.email,
-            updatedAt: updatedUser.updatedAt.toLocaleString(),
-            expiresAt: updatedUser.twoFactorCodeExpiresAt?.toLocaleString(),
+            updatedAt: updatedUser.updatedAt.toLocaleString("en-US", {
+              timeZone: "Asia/Dhaka",
+            }),
+            expiresAt: updatedUser.twoFactorCodeExpiresAt?.toLocaleString(
+              "en-US",
+              {
+                timeZone: "Asia/Dhaka",
+              }
+            ),
             loginLink: `${env.FRONTEND_BASE_URL}/auth/2fa?token=${updatedUser.twoFactorToken}`,
           },
         } as never)
@@ -438,6 +715,7 @@ class AuthService {
       });
 
       return {
+        email: updatedUser.email,
         twoFactorRequired: true,
         twoFactorToken: updatedUser.twoFactorToken,
       };
@@ -492,6 +770,8 @@ class AuthService {
           id: true,
           email: true,
           lastLoginAt: true,
+          lastFailedLoginAt: true,
+          failedLoginAttempts: true,
         },
       }),
     ]);
@@ -504,7 +784,9 @@ class AuthService {
         template: "new-login-detected",
         context: {
           email: user.email,
-          lastLoginAt: user.lastLoginAt?.toLocaleString(),
+          lastLoginAt: user.lastLoginAt?.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
         },
       } as never)
       .catch((error) => {
@@ -526,6 +808,7 @@ class AuthService {
     });
 
     return {
+      email: user.email,
       token: session.token,
     };
   }

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import {
   RegisterUserInput,
   ResendVerificationInput,
@@ -19,14 +19,21 @@ class AuthController {
         RegisterUserInput,
         Record<string, never>
       >,
-      res: Response,
-      _next: NextFunction
+      res: Response
     ) => {
       const userData = req.body;
 
       const result = await authService.register(userData);
 
-      sendSuccess(res, result, "User registered successfully", 201);
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+          token: result.token,
+        },
+        `User registered successfully. Verification email sent to ${result.email}`,
+        201
+      );
     }
   );
 
@@ -38,14 +45,21 @@ class AuthController {
         ResendVerificationInput,
         Record<string, never>
       >,
-      res: Response,
-      _next: NextFunction
+      res: Response
     ) => {
       const requestData = req.body;
 
       const result = await authService.resendVerification(requestData);
 
-      sendSuccess(res, result, "Verification email resent successfully", 200);
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+          token: result.token,
+        },
+        `Verification email resent successfully to ${result.email}`,
+        200
+      );
     }
   );
 
@@ -57,14 +71,20 @@ class AuthController {
         VerifyEmailInput,
         Record<string, never>
       >,
-      res: Response,
-      _next: NextFunction
+      res: Response
     ) => {
       const requestData = req.body;
 
       const result = await authService.verifyEmail(requestData);
 
-      sendSuccess(res, result, "Email verified successfully", 200);
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+        },
+        `Email verified successfully. Confirmation email sent to ${result.email}`,
+        200
+      );
     }
   );
 
@@ -76,8 +96,7 @@ class AuthController {
         LoginInput,
         Record<string, never>
       >,
-      res: Response,
-      _next: NextFunction
+      res: Response
     ) => {
       const requestData = req.body;
 
@@ -86,8 +105,13 @@ class AuthController {
       if (result.twoFactorRequired) {
         return sendSuccess(
           res,
-          { twoFactorToken: result.twoFactorToken, twoFactorRequired: true },
-          "Two-factor authentication required",
+          {
+            email: result.email,
+            twoFactorToken: result.twoFactorToken,
+            twoFactorRequired: true,
+            token: null,
+          },
+          `Two-factor authentication required. Please verify to proceed, ${result.email}`,
           200
         );
       }
@@ -97,13 +121,24 @@ class AuthController {
         signed: true,
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
         httpOnly: true,
-        path: "/",
+        path: "*",
+        domain: env.COOKIE_DOMAIN,
         secure: env.NODE_ENV === "production",
         sameSite: "lax",
         priority: "high",
       });
 
-      sendSuccess(res, result, "User logged in successfully", 200);
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+          twoFactorToken: null,
+          twoFactorRequired: false,
+          token: result.token,
+        },
+        `Logged in successfully. Welcome back, ${result.email}`,
+        200
+      );
     }
   );
 }

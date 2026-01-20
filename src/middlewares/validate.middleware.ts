@@ -20,7 +20,7 @@ export const validate =
       // Fixes: "Object is of type 'unknown'"
       if (error instanceof ZodError) {
         const details = error.issues;
-        const errorMessage = details[0]?.message || "Validation Failed";
+        const errorMessage = "Validation Failed";
 
         // Pass the error to our refined HttpError class
         return next(new HttpError(errorMessage, 400, details));

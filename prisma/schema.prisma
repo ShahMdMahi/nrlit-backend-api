@@ -120,11 +120,12 @@ model User {
   password            String
   avatar              String?
   dateOfBirth         DateTime?
+  verificationCode    String?
   verificationToken   String?   @unique
   resetPasswordToken  String?   @unique
-  failedLoginAttempts Int       @default(0)
   twoFactorCode       String?
-  twoFactorToken      String?
+  twoFactorToken      String?   @unique
+  failedLoginAttempts Int       @default(0)
 
   // Enums
   role Role @default(NORMAL_USER)

@@ -7,7 +7,7 @@ Content-Type: application/json
   "lastName": "Mahi",
   "username": "shahmdmahi",
   "email": "shahmdmahi24@gmail.com",
-  "phone": "+8801757290258",
+  "phone": "01757290258",
   "password": "Iliket90@abc",
   "confirmPassword": "Iliket90@abc"
 }
@@ -29,7 +29,8 @@ POST http://localhost:5000/api/v1/auth/verify-email
 Content-Type: application/json
 
 {
-  "token": "8ebed04d505a51f956239beab72e8acfc7510f4799d6881d531e01e28365e039"
+  "token": "11beced13c7e3dae4adc120b14a6b3f429ad2e5fbbef666b62e2ab13e48394783ca888c58cea1f0acfcbbfbf0558de87cdd9034bf6517fe15cd76c9975c87f24",
+  "code": "214370"
 }
 
 
@@ -42,3 +43,6 @@ Content-Type: application/json
   "identifier": "shahmdmahi",
   "password": "Iliket90@abc"
 }
+
+
+###

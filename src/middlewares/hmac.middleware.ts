@@ -10,6 +10,7 @@ export const hmacAuthorize = (
 ) => {
   const signature = req.get("x-signature");
   const timestamp = req.get("x-timestamp"); // Prevents replay attacks
+  const bodyString = req.body ? JSON.stringify(req.body) : "";
 
   if (!signature || !timestamp) {
     throw new HttpError("Missing Authentication Headers", 401);
@@ -25,7 +26,7 @@ export const hmacAuthorize = (
 
   // 2. Reconstruct the message that was signed
   // We include the method, path, and timestamp.
-  const message = `${req.method}:${req.path}:${timestamp}`;
+  const message = `${req.method}:${req.path}:${timestamp}:${bodyString}`;
 
   // 3. Generate our own signature using the secret stored in env
   const expectedSignature = crypto

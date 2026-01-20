@@ -10,7 +10,7 @@ import {
   authRateLimit,
 } from "./middlewares/rate-limit.middleware.js";
 import { cookieParserMiddleware } from "./middlewares/cookie-parser.middleware.js";
-// import { hmacAuthorize } from "./middlewares/hmac.middleware.js";
+import { hmacAuthorize } from "./middlewares/hmac.middleware.js";
 import { useragentMiddleware } from "./middlewares/useragent.middleware.js";
 import { hppMiddleware } from "./middlewares/hpp.middleware.js";
 import { xssSanitizeMiddleware } from "./middlewares/xss-sanitize.middleware.js";
@@ -46,7 +46,7 @@ app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 app.use(cookieParserMiddleware);
 
 // 5. API Authorization (HMAC)
-// app.use(hmacAuthorize);
+app.use(hmacAuthorize);
 
 // 6. Sanitization & Metadata
 app.use(useragentMiddleware);
