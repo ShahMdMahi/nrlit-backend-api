@@ -5,7 +5,10 @@ import {
   loginSchema,
   registerSchema,
   resendVerificationSchema,
+  twoFactorSchema,
   verifyEmailSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from "../schemas/auth.schema.js";
 
 const router = Router();
@@ -22,5 +25,16 @@ router.post(
   authController.verifyEmail
 );
 router.post("/login", validate(loginSchema), authController.login);
+router.post("/2fa-verify", validate(twoFactorSchema), authController.twoFactor);
+router.post(
+  "/forgot-password",
+  validate(forgotPasswordSchema),
+  authController.forgotPassword
+);
+router.post(
+  "/reset-password",
+  validate(resetPasswordSchema),
+  authController.resetPassword
+);
 
 export { router as authRouter };

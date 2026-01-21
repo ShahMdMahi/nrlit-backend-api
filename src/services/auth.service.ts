@@ -7,10 +7,16 @@ import {
   RegisterUserInput,
   ResendVerificationInput,
   VerifyEmailInput,
+  TwoFactorInput,
+  ForgotPasswordInput,
+  ResetPasswordInput,
   loginSchema,
   registerSchema,
   resendVerificationSchema,
   verifyEmailSchema,
+  twoFactorSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from "../schemas/auth.schema.js";
 import { HttpError } from "../utils/http-error.js";
 import { logAuditEvent } from "../utils/log-audit.js";
@@ -117,7 +123,17 @@ class AuthService {
     });
 
     if (!hashedPassword) {
-      throw new HttpError("Failed to hash password", 500);
+      throw new HttpError(
+        "Failed to hash password",
+        500,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "password"],
+            message: "Failed to hash password",
+          },
+        ]).issues
+      );
     }
 
     const verificationToken = crypto.randomBytes(64).toString("hex");
@@ -215,6 +231,7 @@ class AuthService {
         id: true,
         email: true,
         verifiedAt: true,
+        bannedAt: true,
         deletedAt: true,
       },
     });
@@ -332,9 +349,6 @@ class AuthService {
     const userExists = await prisma.user.findFirst({
       where: {
         verificationToken: validate.data.body.token,
-        verificationTokenExpiredAt: {
-          gt: new Date(),
-        },
         bannedAt: null,
         deletedAt: null,
       },
@@ -345,6 +359,7 @@ class AuthService {
         verifiedAt: true,
         verificationCode: true,
         verificationTokenExpiredAt: true,
+        bannedAt: true,
         deletedAt: true,
       },
     });
@@ -377,7 +392,10 @@ class AuthService {
       );
     }
 
-    if (userExists.verificationTokenExpiredAt! < new Date()) {
+    if (
+      userExists.verificationTokenExpiredAt &&
+      userExists.verificationTokenExpiredAt < new Date()
+    ) {
       throw new HttpError(
         "Verification token has expired",
         400,
@@ -514,6 +532,7 @@ class AuthService {
         lockedUntil: true,
         suspendedAt: true,
         bannedAt: true,
+        deletedAt: true,
         twoFactorEnabledAt: true,
         failedLoginAttempts: true,
       },
@@ -796,6 +815,18 @@ class AuthService {
       });
 
     logAuditEvent({
+      entity: AuditEntity.SESSION,
+      action: AuditAction.SESSION_CREATED,
+      entityId: session.id,
+      description: `Session created for user: ${user.email}`,
+      userId: user.id,
+    }).catch((err) => {
+      logger.error("Failed to log audit event for session creation:", {
+        err,
+      });
+    });
+
+    logAuditEvent({
       entity: AuditEntity.USER,
       action: AuditAction.USER_LOGGED_IN,
       entityId: user.id,
@@ -811,6 +842,546 @@ class AuthService {
       email: user.email,
       token: session.token,
     };
+  }
+
+  public async twoFactor(data: TwoFactorInput) {
+    const validate = await twoFactorSchema.safeParseAsync({ body: data });
+
+    if (!validate.success) {
+      throw new HttpError("Invalid data", 400, validate.error.issues);
+    }
+
+    const userExists = await prisma.user.findFirst({
+      where: {
+        twoFactorToken: validate.data.body.token,
+        bannedAt: null,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        twoFactorToken: true,
+        twoFactorCode: true,
+        twoFactorCodeExpiresAt: true,
+        bannedAt: true,
+        deletedAt: true,
+      },
+    });
+
+    if (!userExists) {
+      throw new HttpError(
+        "Invalid or expired two-factor token",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Invalid or expired two-factor token",
+          },
+        ])
+      );
+    }
+
+    if (
+      userExists.twoFactorCodeExpiresAt &&
+      userExists.twoFactorCodeExpiresAt < new Date()
+    ) {
+      logAuditEvent({
+        entity: AuditEntity.USER,
+        action: AuditAction.USER_2FA_FAILED,
+        entityId: userExists.id,
+        description: `Two-factor code has expired for: ${userExists.email}`,
+        userId: userExists.id,
+      }).catch((err) => {
+        logger.error("Failed to log audit event for two-factor failure:", {
+          err,
+        });
+      });
+      throw new HttpError(
+        "Two-factor code has expired",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Two-factor code has expired",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.twoFactorToken !== validate.data.body.token) {
+      logAuditEvent({
+        entity: AuditEntity.USER,
+        action: AuditAction.USER_2FA_FAILED,
+        entityId: userExists.id,
+        description: `Invalid two-factor token attempt for: ${userExists.email}`,
+        userId: userExists.id,
+      }).catch((err) => {
+        logger.error("Failed to log audit event for two-factor failure:", {
+          err,
+        });
+      });
+      throw new HttpError(
+        "Invalid two-factor token",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Invalid two-factor token",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.twoFactorCode !== validate.data.body.code) {
+      logAuditEvent({
+        entity: AuditEntity.USER,
+        action: AuditAction.USER_2FA_FAILED,
+        entityId: userExists.id,
+        description: `Invalid two-factor code attempt for: ${userExists.email}`,
+        userId: userExists.id,
+      }).catch((err) => {
+        logger.error("Failed to log audit event for two-factor failure:", {
+          err,
+        });
+      });
+      throw new HttpError(
+        "Invalid two-factor code",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "code"],
+            message: "Invalid two-factor code",
+          },
+        ]).issues
+      );
+    }
+
+    logAuditEvent({
+      entity: AuditEntity.USER,
+      action: AuditAction.USER_2FA_VERIFIED,
+      entityId: userExists.id,
+      description: `Two-factor authentication verified for: ${userExists.email}`,
+      userId: userExists.id,
+    }).catch((err) => {
+      logger.error("Failed to log audit event for two-factor verification:", {
+        err,
+      });
+    });
+
+    const userSessions = await prisma.session.findMany({
+      where: { userId: userExists.id },
+      select: {
+        id: true,
+        userId: true,
+        accessedAt: true,
+      },
+      orderBy: {
+        accessedAt: "asc",
+      },
+    });
+
+    if (userSessions && userSessions.length >= 5 && userSessions[0]) {
+      await prisma.session.delete({
+        where: {
+          id: userSessions[0].id,
+        },
+      });
+    }
+
+    const sessionToken = crypto.randomBytes(64).toString("hex");
+
+    const [session, user] = await prisma.$transaction([
+      prisma.session.create({
+        data: {
+          token: sessionToken,
+          expiredAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          user: { connect: { id: userExists.id } },
+        },
+        select: {
+          id: true,
+          userId: true,
+          token: true,
+          createdAt: true,
+          expiredAt: true,
+        },
+      }),
+      prisma.user.update({
+        where: { id: userExists.id },
+        data: {
+          lastLoginAt: new Date(),
+          lockedUntil: null,
+          lastFailedLoginAt: null,
+          failedLoginAttempts: 0,
+        },
+        select: {
+          id: true,
+          email: true,
+          lastLoginAt: true,
+          lastFailedLoginAt: true,
+          failedLoginAttempts: true,
+        },
+      }),
+    ]);
+
+    transporter
+      .sendMail({
+        from: env.EMAIL_FROM,
+        to: user.email,
+        subject: "New Login Detected - NRLIT",
+        template: "new-login-detected",
+        context: {
+          email: user.email,
+          lastLoginAt: user.lastLoginAt?.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
+        },
+      } as never)
+      .catch((error) => {
+        logger.error("Failed to send new login detected email:", {
+          error,
+        });
+      });
+
+    logAuditEvent({
+      entity: AuditEntity.SESSION,
+      action: AuditAction.SESSION_CREATED,
+      entityId: session.id,
+      description: `Session created for user: ${user.email}`,
+      userId: user.id,
+    }).catch((err) => {
+      logger.error("Failed to log audit event for session creation:", {
+        err,
+      });
+    });
+
+    logAuditEvent({
+      entity: AuditEntity.USER,
+      action: AuditAction.USER_LOGGED_IN,
+      entityId: user.id,
+      description: `User logged in: ${user.email}`,
+      userId: user.id,
+    }).catch((err) => {
+      logger.error("Failed to log audit event for user login:", {
+        err,
+      });
+    });
+
+    return {
+      email: user.email,
+      token: session.token,
+    };
+  }
+
+  public async forgotPassword(data: ForgotPasswordInput) {
+    const validate = await forgotPasswordSchema.safeParseAsync({ body: data });
+
+    if (!validate.success) {
+      throw new HttpError("Invalid data", 400, validate.error.issues);
+    }
+
+    const userExists = await prisma.user.findFirst({
+      where: {
+        email: validate.data.body.email,
+        bannedAt: null,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        verifiedAt: true,
+        approvedAt: true,
+        bannedAt: true,
+        deletedAt: true,
+      },
+    });
+
+    if (!userExists) {
+      throw new HttpError(
+        "User does not exist",
+        404,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "User does not exist",
+          },
+        ]).issues
+      );
+    }
+
+    if (!userExists.verifiedAt) {
+      throw new HttpError(
+        "Email is not verified",
+        403,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "Email is not verified",
+          },
+        ]).issues
+      );
+    }
+
+    if (!userExists.approvedAt) {
+      throw new HttpError(
+        "Account is not approved",
+        403,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "Account is not approved",
+          },
+        ]).issues
+      );
+    }
+
+    const resetPasswordToken = crypto.randomBytes(64).toString("hex");
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userExists.id },
+      data: {
+        resetPasswordToken: resetPasswordToken,
+        resetPasswordTokenExpiredAt: new Date(Date.now() + 1 * 60 * 60 * 1000),
+      },
+      select: {
+        id: true,
+        email: true,
+        resetPasswordToken: true,
+        resetPasswordTokenExpiredAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!updatedUser) {
+      throw new HttpError(
+        "Failed to generate reset password token",
+        500,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "email"],
+            message: "Failed to generate reset password token",
+          },
+        ]).issues
+      );
+    }
+
+    await transporter
+      .sendMail({
+        from: env.EMAIL_FROM,
+        to: updatedUser.email,
+        subject: "Password Reset Request - NRLIT",
+        template: "forgot-password",
+        context: {
+          id: updatedUser.id,
+          email: updatedUser.email,
+          resetUrl: `${env.FRONTEND_BASE_URL}/auth/reset-password?token=${updatedUser.resetPasswordToken}`,
+          resetTokenExpiresAt:
+            updatedUser.resetPasswordTokenExpiredAt?.toLocaleString("en-US", {
+              timeZone: "Asia/Dhaka",
+            }),
+          updatedAt: updatedUser.updatedAt.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
+        },
+      } as never)
+      .catch((error) => {
+        logger.error("Failed to send password reset email:", { error });
+      });
+
+    logAuditEvent({
+      entity: AuditEntity.USER,
+      action: AuditAction.USER_FORGOT_PASSWORD,
+      entityId: updatedUser.id,
+      description: `Sent password reset email to: ${updatedUser.email}`,
+      userId: updatedUser.id,
+    }).catch((err) => {
+      logger.error("Failed to log audit event for forgot password:", {
+        err,
+      });
+    });
+
+    return { email: updatedUser.email };
+  }
+
+  public async resetPassword(data: ResetPasswordInput) {
+    const validate = await resetPasswordSchema.safeParseAsync({ body: data });
+
+    if (!validate.success) {
+      throw new HttpError("Invalid data", 400, validate.error.issues);
+    }
+
+    const userExists = await prisma.user.findFirst({
+      where: {
+        resetPasswordToken: validate.data.body.token,
+        bannedAt: null,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        resetPasswordToken: true,
+        resetPasswordTokenExpiredAt: true,
+        password: true,
+        deletedAt: true,
+      },
+    });
+
+    if (!userExists) {
+      throw new HttpError(
+        "Invalid or expired verification token",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Invalid or expired verification token",
+          },
+        ]).issues
+      );
+    }
+
+    if (
+      userExists.resetPasswordTokenExpiredAt &&
+      userExists.resetPasswordTokenExpiredAt < new Date()
+    ) {
+      throw new HttpError(
+        "Reset password token has expired",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Reset password token has expired",
+          },
+        ]).issues
+      );
+    }
+
+    if (userExists.resetPasswordToken !== validate.data.body.token) {
+      throw new HttpError(
+        "Invalid reset password token",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Invalid reset password token",
+          },
+        ]).issues
+      );
+    }
+
+    const passwordMatch = await argon2.verify(
+      userExists.password,
+      validate.data.body.newPassword
+    );
+
+    if (passwordMatch) {
+      throw new HttpError(
+        "New password cannot be the same as the old password",
+        400,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "newPassword"],
+            message: "New password cannot be the same as the old password",
+          },
+        ]).issues
+      );
+    }
+
+    const hashedPassword = await argon2.hash(validate.data.body.newPassword, {
+      type: argon2.argon2id,
+      memoryCost: 65536,
+      timeCost: 3,
+      parallelism: 4,
+    });
+
+    if (!hashedPassword) {
+      throw new HttpError(
+        "Failed to hash password",
+        500,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "newPassword"],
+            message: "Failed to hash password",
+          },
+        ]).issues
+      );
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userExists.id },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null,
+        resetPasswordTokenExpiredAt: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        resetPasswordToken: true,
+        resetPasswordTokenExpiredAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!updatedUser) {
+      throw new HttpError(
+        "Failed to update password",
+        500,
+        new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            path: ["body", "token"],
+            message: "Failed to update password",
+          },
+        ]).issues
+      );
+    }
+
+    transporter
+      .sendMail({
+        from: env.EMAIL_FROM,
+        to: updatedUser.email,
+        subject: "Password Reset Confirmation - NRLIT",
+        template: "password-reseted",
+        context: {
+          id: updatedUser.id,
+          email: updatedUser.email,
+          updatedAt: updatedUser.updatedAt?.toLocaleString("en-US", {
+            timeZone: "Asia/Dhaka",
+          }),
+          loginUrl: `${env.FRONTEND_BASE_URL}/auth/login`,
+        },
+      } as never)
+      .catch((error) => {
+        logger.error("Failed to send password reset confirmation email:", {
+          error,
+        });
+      });
+
+    logAuditEvent({
+      entity: AuditEntity.USER,
+      action: AuditAction.USER_RESET_PASSWORD,
+      entityId: updatedUser.id,
+      description: `Password reset for: ${updatedUser.email}`,
+      userId: updatedUser.id,
+    }).catch((err) => {
+      logger.error("Failed to log audit event for password reset:", {
+        err,
+      });
+    });
+
+    return { email: updatedUser.email };
   }
 }
 

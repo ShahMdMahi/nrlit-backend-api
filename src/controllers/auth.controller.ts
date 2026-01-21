@@ -4,11 +4,13 @@ import {
   ResendVerificationInput,
   VerifyEmailInput,
   LoginInput,
+  TwoFactorInput,
+  ForgotPasswordInput,
+  ResetPasswordInput,
 } from "../schemas/auth.schema.js";
 import { authService } from "../services/auth.service.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { sendSuccess } from "../utils/response.js";
-import { env } from "../libs/env.js";
 
 class AuthController {
   public register = asyncHandler(
@@ -116,18 +118,6 @@ class AuthController {
         );
       }
 
-      res.cookie("session_token", result.token, {
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        signed: true,
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-        httpOnly: true,
-        path: "*",
-        domain: env.COOKIE_DOMAIN,
-        secure: env.NODE_ENV === "production",
-        sameSite: "lax",
-        priority: "high",
-      });
-
       sendSuccess(
         res,
         {
@@ -137,6 +127,82 @@ class AuthController {
           token: result.token,
         },
         `Logged in successfully. Welcome back, ${result.email}`,
+        200
+      );
+    }
+  );
+
+  public twoFactor = asyncHandler(
+    async (
+      req: Request<
+        Record<string, never>,
+        Record<string, never>,
+        TwoFactorInput,
+        Record<string, never>
+      >,
+      res: Response
+    ) => {
+      const requestData = req.body;
+
+      const result = await authService.twoFactor(requestData);
+
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+          token: result.token,
+        },
+        `Two-factor authentication successful. Welcome back, ${result.email}`,
+        200
+      );
+    }
+  );
+
+  public forgotPassword = asyncHandler(
+    async (
+      req: Request<
+        Record<string, never>,
+        Record<string, never>,
+        ForgotPasswordInput,
+        Record<string, never>
+      >,
+      res: Response
+    ) => {
+      const requestData = req.body;
+
+      const result = await authService.forgotPassword(requestData);
+
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+        },
+        `Password reset email sent successfully to ${result.email}`,
+        200
+      );
+    }
+  );
+
+  public resetPassword = asyncHandler(
+    async (
+      req: Request<
+        Record<string, never>,
+        Record<string, never>,
+        ResetPasswordInput,
+        Record<string, never>
+      >,
+      res: Response
+    ) => {
+      const requestData = req.body;
+
+      const result = await authService.resetPassword(requestData);
+
+      sendSuccess(
+        res,
+        {
+          email: result.email,
+        },
+        `Password reset successfully. Confirmation email sent to ${result.email}`,
         200
       );
     }
