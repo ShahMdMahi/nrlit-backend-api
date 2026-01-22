@@ -15,11 +15,9 @@ export const escapeMarkdownV2 = (text: string): string => {
 export const formatJson = (data: object): string => {
   try {
     const jsonString = JSON.stringify(data, null, 2);
-    // In MarkdownV2, inside a pre-formatted code block (```),
-    // only \ and ` need to be escaped.
-    // We wrap the escaped string in JSON code block syntax.
-    const escapedCode = jsonString.replace(/[`\\]/g, "\\$&");
-    return `\`\`\`json\n${escapedCode}\n\`\`\``;
+    // Inside a code block, only backticks and backslashes need escaping
+    const escaped = jsonString.replace(/[`\\]/g, "\\$&");
+    return escaped; // Do NOT wrap with ```json here
   } catch (error) {
     logger.error("Failed to stringify JSON data:", { error });
     return "Error: Could not stringify JSON data";

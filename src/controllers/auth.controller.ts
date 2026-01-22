@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import {
-  RegisterUserInput,
+  RegisterInput,
   ResendVerificationInput,
   VerifyEmailInput,
   LoginInput,
@@ -18,14 +18,15 @@ class AuthController {
       req: Request<
         Record<string, never>,
         Record<string, never>,
-        RegisterUserInput,
+        RegisterInput,
         Record<string, never>
       >,
       res: Response
     ) => {
-      const userData = req.body;
+      const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.register(userData);
+      const result = await authService.register(requestData, deviceInfo);
 
       sendSuccess(
         res,
@@ -50,8 +51,12 @@ class AuthController {
       res: Response
     ) => {
       const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.resendVerification(requestData);
+      const result = await authService.resendVerification(
+        requestData,
+        deviceInfo
+      );
 
       sendSuccess(
         res,
@@ -76,8 +81,9 @@ class AuthController {
       res: Response
     ) => {
       const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.verifyEmail(requestData);
+      const result = await authService.verifyEmail(requestData, deviceInfo);
 
       sendSuccess(
         res,
@@ -101,8 +107,9 @@ class AuthController {
       res: Response
     ) => {
       const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.login(requestData);
+      const result = await authService.login(requestData, deviceInfo);
 
       if (result.twoFactorRequired) {
         return sendSuccess(
@@ -143,8 +150,9 @@ class AuthController {
       res: Response
     ) => {
       const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.twoFactor(requestData);
+      const result = await authService.twoFactor(requestData, deviceInfo);
 
       sendSuccess(
         res,
@@ -169,8 +177,9 @@ class AuthController {
       res: Response
     ) => {
       const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.forgotPassword(requestData);
+      const result = await authService.forgotPassword(requestData, deviceInfo);
 
       sendSuccess(
         res,
@@ -194,8 +203,9 @@ class AuthController {
       res: Response
     ) => {
       const requestData = req.body;
+      const deviceInfo = req.device;
 
-      const result = await authService.resetPassword(requestData);
+      const result = await authService.resetPassword(requestData, deviceInfo);
 
       sendSuccess(
         res,

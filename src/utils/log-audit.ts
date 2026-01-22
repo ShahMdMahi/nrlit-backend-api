@@ -41,7 +41,11 @@ export async function logAuditEvent({
       },
     });
 
-    const timestamp = await log.createdAt.toISOString();
+    const timestamp = await log.createdAt.toLocaleString("en-US", {
+      timeZone: "Asia/Dhaka",
+      timeStyle: "long",
+      dateStyle: "long",
+    });
     const formattedMetadata = metadata
       ? formatJson(JSON.parse(metadata))
       : "None";
@@ -63,7 +67,7 @@ export async function logAuditEvent({
 \`\`\`json
 ${formattedMetadata}
 \`\`\`
-    `.trim();
+`.trim();
 
     try {
       await telegramBot.telegram.sendMessage(

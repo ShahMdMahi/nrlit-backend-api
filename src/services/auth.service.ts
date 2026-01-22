@@ -3,8 +3,8 @@ import crypto from "node:crypto";
 import { z } from "zod";
 import { prisma } from "../libs/db.js";
 import {
+  RegisterInput,
   LoginInput,
-  RegisterUserInput,
   ResendVerificationInput,
   VerifyEmailInput,
   TwoFactorInput,
@@ -20,13 +20,14 @@ import {
 } from "../schemas/auth.schema.js";
 import { HttpError } from "../utils/http-error.js";
 import { logAuditEvent } from "../utils/log-audit.js";
-import { AuditAction, AuditEntity } from "../prisma/enums.js";
+import { AuditAction, AuditEntity, DeviceType } from "../prisma/enums.js";
 import { logger } from "../utils/logger.js";
 import { transporter } from "../libs/nodemailer.js";
 import { env } from "../libs/env.js";
+import { DeviceInfo } from "../types/device-info.js";
 
 class AuthService {
-  public async register(data: RegisterUserInput) {
+  public async register(data: RegisterInput, deviceInfo: DeviceInfo) {
     const validate = await registerSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
@@ -205,6 +206,10 @@ class AuthService {
       entityId: newUser.id,
       description: `User registered with email: ${newUser.email}`,
       userId: newUser.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for user registration:", { err });
     });
@@ -212,7 +217,10 @@ class AuthService {
     return { email: newUser.email, token: newUser.verificationToken };
   }
 
-  public async resendVerification(data: ResendVerificationInput) {
+  public async resendVerification(
+    data: ResendVerificationInput,
+    deviceInfo: DeviceInfo
+  ) {
     const validate = await resendVerificationSchema.safeParseAsync({
       body: data,
     });
@@ -328,8 +336,12 @@ class AuthService {
       entity: AuditEntity.USER,
       action: AuditAction.USER_RESEND_VERIFICATION,
       entityId: updatedUser.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
       description: `Resent verification email to: ${updatedUser.email}`,
       userId: updatedUser.id,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for resending verification:", {
         err,
@@ -339,7 +351,7 @@ class AuthService {
     return { email: updatedUser.email, token: updatedUser.verificationToken };
   }
 
-  public async verifyEmail(data: VerifyEmailInput) {
+  public async verifyEmail(data: VerifyEmailInput, deviceInfo: DeviceInfo) {
     const validate = await verifyEmailSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
@@ -495,6 +507,10 @@ class AuthService {
       entityId: verifiedUser.id,
       description: `Email verified for: ${verifiedUser.email}`,
       userId: verifiedUser.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for email verification:", {
         err,
@@ -504,7 +520,7 @@ class AuthService {
     return { email: verifiedUser.email };
   }
 
-  public async login(data: LoginInput) {
+  public async login(data: LoginInput, deviceInfo: DeviceInfo) {
     const validate = await loginSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
@@ -653,6 +669,10 @@ class AuthService {
         entityId: userExists.id,
         description: `Failed login attempt for: ${userExists.email}`,
         userId: userExists.id,
+        ipAddress: deviceInfo.ipAddress,
+        userAgent: deviceInfo.userAgent,
+        fingerprint: deviceInfo.fingerprint,
+        metadata: JSON.stringify({ deviceInfo }),
       }).catch((err) => {
         logger.error("Failed to log audit event for failed login:", {
           err,
@@ -727,6 +747,10 @@ class AuthService {
         entityId: updatedUser.id,
         description: `Two-factor authentication challenged for: ${updatedUser.email}`,
         userId: updatedUser.id,
+        ipAddress: deviceInfo.ipAddress,
+        userAgent: deviceInfo.userAgent,
+        fingerprint: deviceInfo.fingerprint,
+        metadata: JSON.stringify({ deviceInfo }),
       }).catch((err) => {
         logger.error("Failed to log audit event for 2FA challenge:", {
           err,
@@ -768,6 +792,7 @@ class AuthService {
           token: sessionToken,
           expiredAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
           user: { connect: { id: userExists.id } },
+          ...deviceInfo,
         },
         select: {
           id: true,
@@ -820,6 +845,10 @@ class AuthService {
       entityId: session.id,
       description: `Session created for user: ${user.email}`,
       userId: user.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for session creation:", {
         err,
@@ -832,6 +861,10 @@ class AuthService {
       entityId: user.id,
       description: `User logged in: ${user.email}`,
       userId: user.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for user login:", {
         err,
@@ -844,7 +877,7 @@ class AuthService {
     };
   }
 
-  public async twoFactor(data: TwoFactorInput) {
+  public async twoFactor(data: TwoFactorInput, deviceInfo: DeviceInfo) {
     const validate = await twoFactorSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
@@ -892,6 +925,10 @@ class AuthService {
         entityId: userExists.id,
         description: `Two-factor code has expired for: ${userExists.email}`,
         userId: userExists.id,
+        ipAddress: deviceInfo.ipAddress,
+        userAgent: deviceInfo.userAgent,
+        fingerprint: deviceInfo.fingerprint,
+        metadata: JSON.stringify({ deviceInfo }),
       }).catch((err) => {
         logger.error("Failed to log audit event for two-factor failure:", {
           err,
@@ -917,6 +954,10 @@ class AuthService {
         entityId: userExists.id,
         description: `Invalid two-factor token attempt for: ${userExists.email}`,
         userId: userExists.id,
+        ipAddress: deviceInfo.ipAddress,
+        userAgent: deviceInfo.userAgent,
+        fingerprint: deviceInfo.fingerprint,
+        metadata: JSON.stringify({ deviceInfo }),
       }).catch((err) => {
         logger.error("Failed to log audit event for two-factor failure:", {
           err,
@@ -942,6 +983,10 @@ class AuthService {
         entityId: userExists.id,
         description: `Invalid two-factor code attempt for: ${userExists.email}`,
         userId: userExists.id,
+        ipAddress: deviceInfo.ipAddress,
+        userAgent: deviceInfo.userAgent,
+        fingerprint: deviceInfo.fingerprint,
+        metadata: JSON.stringify({ deviceInfo }),
       }).catch((err) => {
         logger.error("Failed to log audit event for two-factor failure:", {
           err,
@@ -966,6 +1011,10 @@ class AuthService {
       entityId: userExists.id,
       description: `Two-factor authentication verified for: ${userExists.email}`,
       userId: userExists.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for two-factor verification:", {
         err,
@@ -1000,6 +1049,8 @@ class AuthService {
           token: sessionToken,
           expiredAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
           user: { connect: { id: userExists.id } },
+          ...deviceInfo,
+          deviceType: deviceInfo.deviceType as DeviceType,
         },
         select: {
           id: true,
@@ -1052,6 +1103,10 @@ class AuthService {
       entityId: session.id,
       description: `Session created for user: ${user.email}`,
       userId: user.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for session creation:", {
         err,
@@ -1064,6 +1119,10 @@ class AuthService {
       entityId: user.id,
       description: `User logged in: ${user.email}`,
       userId: user.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for user login:", {
         err,
@@ -1076,7 +1135,10 @@ class AuthService {
     };
   }
 
-  public async forgotPassword(data: ForgotPasswordInput) {
+  public async forgotPassword(
+    data: ForgotPasswordInput,
+    deviceInfo: DeviceInfo
+  ) {
     const validate = await forgotPasswordSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
@@ -1201,6 +1263,10 @@ class AuthService {
       entityId: updatedUser.id,
       description: `Sent password reset email to: ${updatedUser.email}`,
       userId: updatedUser.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for forgot password:", {
         err,
@@ -1210,7 +1276,7 @@ class AuthService {
     return { email: updatedUser.email };
   }
 
-  public async resetPassword(data: ResetPasswordInput) {
+  public async resetPassword(data: ResetPasswordInput, deviceInfo: DeviceInfo) {
     const validate = await resetPasswordSchema.safeParseAsync({ body: data });
 
     if (!validate.success) {
@@ -1375,6 +1441,10 @@ class AuthService {
       entityId: updatedUser.id,
       description: `Password reset for: ${updatedUser.email}`,
       userId: updatedUser.id,
+      ipAddress: deviceInfo.ipAddress,
+      userAgent: deviceInfo.userAgent,
+      fingerprint: deviceInfo.fingerprint,
+      metadata: JSON.stringify({ deviceInfo }),
     }).catch((err) => {
       logger.error("Failed to log audit event for password reset:", {
         err,

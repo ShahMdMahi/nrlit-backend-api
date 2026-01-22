@@ -78,7 +78,7 @@ export const registerSchema = z.object({
     }),
 });
 
-export type RegisterUserInput = z.infer<typeof registerSchema>["body"];
+export type RegisterInput = z.infer<typeof registerSchema>["body"];
 
 export const resendVerificationSchema = z.object({
   body: z.object({

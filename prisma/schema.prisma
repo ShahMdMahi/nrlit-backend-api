@@ -174,12 +174,18 @@ model Session {
   // Fields
   token          String  @unique
   ipAddress      String?
-  isp            String?
-  region         String?
   country        String?
+  countryCode    String?
+  region         String?
+  regionName     String?
   city           String?
-  latitude       String?
-  longitude      String?
+  zip            String?
+  lat            String?
+  lon            String?
+  timezone       String?
+  isp            String?
+  org            String?
+  as             String?
   userAgent      String?
   fingerprint    String?
   deviceName     String?
